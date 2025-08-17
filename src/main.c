@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <person.h>
 
+#define DATABASE "database.txt"
 #define TEXT_ADD_PERSON "1. Add a new person"
 #define TEXT_REMOVE_PERSON "2. Remove a person"
 #define TEXT_UPDATE_PERSON "3. Update a person"
@@ -19,6 +21,8 @@ void person_delete(void);
 void person_update(void);
 void person_list(void);
 void person_find(void);
+
+bool is_database_exist(void);
 
 int main(void)
 {
@@ -66,7 +70,7 @@ bool option_select(int option)
         person_find();
         break;
     case 6:
-        printf("Exit program ----------");
+        printf("Exit program ----------\n");
         status = false;
         break;
 
@@ -79,7 +83,35 @@ bool option_select(int option)
 
 void person_add(void)
 {
-    printf("Add a new person\n");
+    printf("---------- Add a new person ----------\n");
+    PERSON_T person;
+    FILE *file;
+
+    printf("Type a name: ");
+    fgets(person.name, PERSON_NAME_LEN - 1, stdin);
+    person.name[strlen(person.name) - 1] = 0;
+
+    printf("Type a address: ");
+    fgets(person.address, PERSON_ADDRESS_LEN - 1, stdin);
+    person.address[strlen(person.address) - 1] = 0;
+
+    printf("Type a age: ");
+    scanf("%d", &person.age);
+    getchar();
+
+    if (is_database_exist() == false)
+    {
+        file = fopen(DATABASE, "w");
+    }
+    else
+    {
+        file = fopen(DATABASE, "a");
+    }
+
+    char format[250] = "";
+    snprintf(format, 250, "%s, %s, %d\n", person.name, person.address, person.age);
+    fprintf(file, "%s", format);
+    fclose(file);
 }
 
 void person_delete(void)
@@ -100,4 +132,19 @@ void person_list(void)
 void person_find(void)
 {
     printf("Find a person\n");
+}
+
+bool is_database_exist(void)
+{
+    bool status = false;
+
+    FILE *file = fopen(DATABASE, "r");
+
+    if (file != NULL)
+    {
+        fclose(file);
+        status = true;
+    }
+
+    return status;
 }
