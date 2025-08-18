@@ -273,7 +273,53 @@ void person_list(void)
 
 void person_find(void)
 {
-    printf("Find a person\n");
+    printf("\n------ Find a person -----\n");
+
+    char name_find[PERSON_NAME_LEN] = "";
+    printf("Type a name to find: ");
+    fgets(name_find, PERSON_NAME_LEN - 1, stdin);
+    // remove the trailing newline by overwriting the last character with '\0'.
+    name_find[strlen(name_find) - 1] = 0;
+
+    if (is_database_exist())
+    {
+        FILE *file = fopen(DATABASE, "r");
+
+        fseek(file, 0, SEEK_END);
+        long size = ftell(file);
+        rewind(file);
+
+        char *buffer = calloc(1, size + 1);
+        size_t len = fread(buffer, sizeof(char), size, file);
+
+        if (ferror(file) != 0)
+        {
+            // code
+        }
+        else
+        {
+            buffer[len + 1] = '\0';
+        }
+
+        char *name_found = strstr(buffer, name_find);
+
+        if (name_found != NULL)
+        {
+            char c;
+            for (int i = 0;; i++)
+            {
+                c = name_found[i];
+                if (c == '\n')
+                    break;
+                else
+                    putc(c, stdout);
+            }
+            putc('\n', stdout);
+        }
+
+        free(buffer);
+        fclose(file);
+    }
 }
 
 int count_items(void)
