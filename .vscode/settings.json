@@ -3,6 +3,14 @@
     "editor.defaultFormatter": "ms-vscode.cpptools",
     "files.associations": {
         "*.env": "shellscript",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "menu.h": "c",
+        "person.h": "c",
+        "use_cases.h": "c",
+        "database.h": "c",
+        "menu_register.h": "c",
+        "stdbool.h": "c"
     },
 }
