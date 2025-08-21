@@ -11,6 +11,7 @@
         "use_cases.h": "c",
         "database.h": "c",
         "menu_register.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "repository.h": "c"
     },
 }
