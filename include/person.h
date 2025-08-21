@@ -4,7 +4,7 @@
 #define PERSON_NAME_LEN 120
 #define PERSON_ADDRESS_LEN 120
 
-typedef struct
+typedef struct PERSON_T
 {
     char name[PERSON_ADDRESS_LEN];
     char address[PERSON_ADDRESS_LEN];

@@ -4,50 +4,37 @@
 #include "person.h"
 #include "use_cases.h"
 #include "database.h"
+#include "repository.h"
 
-void use_case_person_find(void)
+void use_case_person_find(REPOSITORY_BASE *repository)
 {
     printf("\n------ Find a person -----\n");
 
+    bool status = false;
+    int id = -1;
     char *name_find = person_input_name();
 
-    if (db_is_database_exist())
+    PERSON_T *person_list;
+    int items;
+
+    repository->recovery_list(repository->object, &person_list, &items);
+
+    for (int i = 0; i < items; i++)
     {
-        FILE *file = fopen(DATABASE_FILE, "r");
-
-        fseek(file, 0, SEEK_END);
-        long size = ftell(file);
-        rewind(file);
-
-        char *buffer = calloc(1, size + 1);
-        size_t len = fread(buffer, sizeof(char), size, file);
-
-        if (ferror(file) != 0)
+        char *found = strstr(person_list[i].name, name_find);
+        if (found != NULL)
         {
-            // code
+            id = i;
+            status = true;
+            break;
         }
-        else
-        {
-            buffer[len + 1] = '\0';
-        }
-
-        char *name_found = strstr(buffer, name_find);
-
-        if (name_found != NULL)
-        {
-            char c;
-            for (int i = 0;; i++)
-            {
-                c = name_found[i];
-                if (c == '\n')
-                    break;
-                else
-                    putc(c, stdout);
-            }
-            putc('\n', stdout);
-        }
-        free(name_find);
-        free(buffer);
-        fclose(file);
     }
+
+    if (status)
+        printf("Found: %s %s %d\n", person_list[id].name, person_list[id].address, person_list[id].age);
+    else
+        printf("Not Found\n");
+
+    free(person_list);
+    free(name_find);
 }

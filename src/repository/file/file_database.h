@@ -4,7 +4,7 @@
 #include "repository.h"
 #include <stdbool.h>
 
-#define DB_DATABASE_FORMAT "%s, %s, %d\n"
+#define DATABASE_FORMAT "%s, %s, %d\n"
 #define DATABASE_FILE "database.txt"
 
 REPOSITORY_BASE *file_create_database(void);

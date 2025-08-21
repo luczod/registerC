@@ -4,50 +4,30 @@
 #include "person.h"
 #include "database.h"
 #include "use_cases.h"
+#include "repository.h"
 
-void use_case_person_delete(void)
+void use_case_person_delete(REPOSITORY_BASE *repository)
 {
     printf("\n---- Remove a person -----\n");
 
-    int items = db_count_items();
-    PERSON_T *people = (PERSON_T *)malloc(sizeof(PERSON_T) * items);
+    int items = 0;
+    PERSON_T *person_list;
 
-    if (people == NULL)
-        return;
-
-    FILE *file = fopen(DATABASE_FILE, "r");
-
-    for (int i = 0; i < items; i++)
-    {
-        char buffer[240] = "";
-        fgets(buffer, 240, file);
-        person_parser(buffer, &people[i]);
-    }
-
-    fclose(file);
+    repository->recovery_list(repository->object, &person_list, &items);
 
     char *name_delete = person_input_name();
 
     for (int i = 0; i < items; i++)
     {
-        if (strncmp(name_delete, people[i].name, PERSON_NAME_LEN) == 0)
+        if (strncmp(name_delete, person_list[i].name, PERSON_NAME_LEN) == 0)
         {
-            memset(&people[i], 0, sizeof(PERSON_T));
+            memset(&person_list[i], 0, sizeof(PERSON_T));
             break;
         }
     }
 
-    file = fopen(DATABASE_FILE, "w");
-
-    for (int i = 0; i < items; i++)
-    {
-        if (people[i].name[0] == '\0' || people[i].address[0] == '\0')
-            continue;
-
-        fprintf(file, DATABASE_ROW, people[i].name, people[i].address, people[i].age);
-    }
+    repository->store_list(repository->object, person_list, items);
 
     free(name_delete);
-    free(people);
-    fclose(file);
+    free(person_list);
 }

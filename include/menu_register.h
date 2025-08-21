@@ -1,6 +1,8 @@
 #ifndef MENU_REGSITER_H
 #define MENU_REGSITER_H
+
 #include <stdbool.h>
+#include "repository.h"
 
 #define MENU_TEXT_ADD_PERSON "1. Add a new person"
 #define MENU_TEXT_REMOVE_PERSON "2. Remove a person"
@@ -22,9 +24,9 @@ typedef enum
 } MENU_OPTION_T;
 
 // pointer to function
-typedef void (*menu_option_base)(void);
+typedef void (*menu_option_base)(REPOSITORY_BASE *repository);
 
-typedef struct
+typedef struct MENU_COMMANDS_T
 {
     MENU_OPTION_T option;
     menu_option_base command;
@@ -32,6 +34,6 @@ typedef struct
 
 void print_menu(void);
 
-bool option_select(int option);
+bool option_select(int option, REPOSITORY_BASE *repository);
 
 #endif

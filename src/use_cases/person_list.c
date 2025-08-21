@@ -4,27 +4,21 @@
 #include "person.h"
 #include "database.h"
 #include "use_cases.h"
+#include "repository.h"
 
-void use_case_person_list(void)
+void use_case_person_list(REPOSITORY_BASE *repository)
 {
     printf("\n----- List all people ----\n");
-    FILE *file;
 
-    if (db_is_database_exist())
+    PERSON_T *person_list;
+    int items;
+
+    repository->recovery_list(repository->object, &person_list, &items);
+
+    for (int i = 0; i < items; i++)
     {
-        file = fopen(DATABASE_FILE, "r");
-    }
-    else
-    {
-        printf("\nno people\n");
-        return;
+        printf("Found: %s %s %d\n", person_list[i].name, person_list[i].address, person_list[i].age);
     }
 
-    char c = fgetc(file);
-    while (c != EOF)
-    {
-        printf("%c", c);
-        c = fgetc(file);
-    }
-    fclose(file);
+    free(person_list);
 }

@@ -32,18 +32,3 @@ char *person_input_name(void)
 
     return name;
 }
-
-void person_parser(char *buffer, PERSON_T *person)
-{
-    if (buffer == NULL || person == NULL)
-        return;
-
-    char *data = strtok(buffer, ",");
-    strncpy(person->name, data, PERSON_NAME_LEN);
-
-    data = strtok(NULL, ",");
-    strncpy(person->address, data, PERSON_ADDRESS_LEN);
-
-    data = strtok(NULL, ",");
-    person->age = atoi(data);
-}

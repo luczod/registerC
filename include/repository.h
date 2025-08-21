@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "person.h"
 
-typedef struct
+typedef struct REPOSITORY_BASE
 {
     void *object;
     bool (*store)(void *object, const PERSON_T *person);

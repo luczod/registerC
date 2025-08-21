@@ -12,6 +12,8 @@
         "database.h": "c",
         "menu_register.h": "c",
         "stdbool.h": "c",
-        "repository.h": "c"
+        "repository.h": "c",
+        "file_database.h": "c",
+        "stdlib.h": "c"
     },
 }
