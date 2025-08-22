@@ -14,6 +14,7 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_BUILD_TYPE Debug)
 
 add_executable(registerC "")
+target_link_libraries(registerC sqlite3)
 
 target_sources(registerC
     PUBLIC
@@ -27,6 +28,7 @@ target_sources(registerC
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_list.c
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_quit.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/file/file_database.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite/sqlite_database.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository_factory.c
     )
@@ -35,4 +37,5 @@ target_include_directories(registerC
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/file
+    ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite
     )

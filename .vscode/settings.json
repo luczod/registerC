@@ -15,6 +15,7 @@
         "repository.h": "c",
         "file_database.h": "c",
         "stdlib.h": "c",
-        "repository_factory.h": "c"
+        "repository_factory.h": "c",
+        "sqlite_database.h": "c"
     },
 }
