@@ -1,6 +1,6 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include "person.h"
-#include "database.h"
 #include "use_cases.h"
 #include "repository.h"
 

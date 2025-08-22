@@ -6,12 +6,13 @@ static int file_count_items(void);
 static bool file_is_database_exist(void);
 static bool file_store(void *object, const PERSON_T *person);
 static bool file_store_list(void *object, const PERSON_T *person_list, int items_amount);
-static bool file_recovery_list(void *object, const PERSON_T **person_list, int *items_amount);
-static void person_parser(const char *buffer, PERSON_T *person);
+static bool file_recovery_list(void *object, PERSON_T **person_list, int *items_amount);
+static void person_parser(char *buffer, PERSON_T *person);
 
 REPOSITORY_BASE *file_create_database(void)
 {
     REPOSITORY_BASE *repository = (REPOSITORY_BASE *)malloc(sizeof(REPOSITORY_BASE));
+
     if (repository)
     {
         repository->object = NULL;
@@ -19,13 +20,15 @@ REPOSITORY_BASE *file_create_database(void)
         repository->store_list = file_store_list;
         repository->recovery_list = file_recovery_list;
     }
+
+    return repository;
 }
 
 static bool file_store(void *object, const PERSON_T *person)
 {
     FILE *file;
 
-    if (db_is_database_exist() == false)
+    if (file_is_database_exist() == false)
     {
         file = fopen(DATABASE_FILE, "w");
     }
@@ -54,18 +57,19 @@ static bool file_store_list(void *object, const PERSON_T *person_list, int items
 
         fprintf(file, DATABASE_FORMAT, person_list[i].name, person_list[i].address, person_list[i].age);
     }
+    fclose(file);
     return true;
 }
 
-static bool file_recovery_list(void *object, const PERSON_T **person_list, int *items_amount)
+static bool file_recovery_list(void *object, PERSON_T **person_list, int *items_amount)
 {
-    int items = db_count_items();
+    int items = file_count_items();
     *items_amount = items;
 
     PERSON_T *_person_list = (PERSON_T *)malloc(sizeof(PERSON_T) * items);
 
     if (_person_list == NULL)
-        return;
+        return false;
 
     FILE *file = fopen(DATABASE_FILE, "r");
 
@@ -119,9 +123,9 @@ static bool file_is_database_exist(void)
     return status;
 }
 
-static void person_parser(const char *buffer, PERSON_T *person)
+static void person_parser(char *buffer, PERSON_T *person)
 {
-    char *temp = (char *)buffer;
+    // char *temp = (char *)buffer;
 
     if (buffer == NULL || person == NULL)
         return;

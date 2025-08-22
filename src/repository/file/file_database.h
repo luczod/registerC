@@ -1,8 +1,9 @@
 #ifndef FILE_DATABASE_H
 #define FILE_DATABASE_H
 
-#include "repository.h"
 #include <stdbool.h>
+#include <string.h>
+#include "repository.h"
 
 #define DATABASE_FORMAT "%s, %s, %d\n"
 #define DATABASE_FILE "database.txt"

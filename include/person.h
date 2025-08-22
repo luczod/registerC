@@ -12,7 +12,6 @@ typedef struct PERSON_T
 } PERSON_T;
 
 PERSON_T person_create(void);
-void person_parser(char *buffer, PERSON_T *people);
 char *person_input_name(void);
 
 #endif /* PERSON_H*/

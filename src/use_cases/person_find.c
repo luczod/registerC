@@ -1,9 +1,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "person.h"
 #include "use_cases.h"
-#include "database.h"
 #include "repository.h"
 
 void use_case_person_find(REPOSITORY_BASE *repository)

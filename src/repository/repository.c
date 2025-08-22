@@ -11,7 +11,7 @@ bool person_store_list(REPOSITORY_BASE *repository, const PERSON_T *person_list,
     return repository->store_list(repository->object, person_list, items_amount);
 }
 
-bool person_recovery_list(REPOSITORY_BASE *repository, const PERSON_T **person_list, int *item_amount)
+bool person_recovery_list(REPOSITORY_BASE *repository, PERSON_T **person_list, int *item_amount)
 {
     return repository->recovery_list(repository->object, person_list, item_amount);
 }

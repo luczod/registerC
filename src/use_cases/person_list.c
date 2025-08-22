@@ -1,8 +1,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "person.h"
-#include "database.h"
 #include "use_cases.h"
 #include "repository.h"
 

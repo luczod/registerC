@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "use_cases.h"
 #include "repository.h"
 
