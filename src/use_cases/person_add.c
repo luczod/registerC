@@ -9,7 +9,13 @@ void use_case_person_add(REPOSITORY_BASE *repository)
     printf("\n---- Add a new person ----\n");
 
     PERSON_T person;
+    STORE_ACTION_T store;
     person = person_create();
 
-    repository->store(repository->object, &person);
+    store.action = repo_insert;
+    store.id = -1;
+    store.amount = 1;
+    store.person = &person;
+
+    repository->store(repository->object, &store);
 }

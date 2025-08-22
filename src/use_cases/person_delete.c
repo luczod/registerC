@@ -12,6 +12,7 @@ void use_case_person_delete(REPOSITORY_BASE *repository)
 
     int items = 0;
     PERSON_T *person_list;
+    STORE_ACTION_T store;
 
     repository->recovery_list(repository->object, &person_list, &items);
 
@@ -22,11 +23,17 @@ void use_case_person_delete(REPOSITORY_BASE *repository)
         if (strncmp(name_delete, person_list[i].name, PERSON_NAME_LEN) == 0)
         {
             memset(&person_list[i], 0, sizeof(PERSON_T));
+
+            store.id = i;
+            store.action = repo_delete;
+            store.amount = items;
+            store.person = person_list;
+
+            repository->store(repository->object, &store);
+
             break;
         }
     }
-
-    repository->store_list(repository->object, person_list, items);
 
     free(name_delete);
     free(person_list);

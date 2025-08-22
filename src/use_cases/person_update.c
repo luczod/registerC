@@ -13,6 +13,7 @@ void use_case_person_update(REPOSITORY_BASE *repository)
     int id = -1;
     int items = 0;
     PERSON_T *person_list;
+    STORE_ACTION_T store;
 
     repository->recovery_list(repository->object, &person_list, &items);
 
@@ -30,12 +31,16 @@ void use_case_person_update(REPOSITORY_BASE *repository)
     if (id != -1)
     {
 
+        store.id = id;
+        store.action = repo_update;
+        store.amount = items;
+        store.person = person_list;
+
         memset(&person_list[id], 0, sizeof(PERSON_T));
-
         person_list[id] = person_create();
-    }
 
-    repository->store_list(repository->object, person_list, items);
+        repository->store(repository->object, &store);
+    }
 
     free(name_update);
     free(person_list);

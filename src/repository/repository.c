@@ -1,9 +1,9 @@
 #include "repository.h"
 /* interface */
 
-bool person_store(REPOSITORY_BASE *repository, const PERSON_T *person)
+bool person_store(REPOSITORY_BASE *repository, STORE_ACTION_T *action)
 {
-    return repository->store(repository->object, person);
+    return repository->store(repository->object, action);
 }
 
 bool person_store_list(REPOSITORY_BASE *repository, const PERSON_T *person_list, int items_amount)
