@@ -17,8 +17,8 @@ typedef struct SQLITE_PERSON_T
     int amount;
 } SQLITE_PERSON_T;
 
-static bool sqlite_prepare_table(SQLITE_CONTEXT *ctx);
 static bool sqlite_database_open(SQLITE_CONTEXT *ctx);
+static bool sqlite_prepare_table(SQLITE_CONTEXT *ctx);
 
 static bool sqlite_insert(SQLITE_CONTEXT *ctx, const PERSON_T *person);
 static bool sqlite_update(SQLITE_CONTEXT *ctx, const PERSON_T *person);
@@ -27,7 +27,7 @@ static bool sqlite_delete(SQLITE_CONTEXT *ctx, const PERSON_T *person);
 static bool sqlite_store(void *object, STORE_ACTION_T *store);
 static bool sqlite_recovery_list(void *object, PERSON_T **person_list, int *items_amount);
 
-static int select_callback(void *user_data, int colums, char **colums_data, char **colums_name);
+static int select_callback(void *user_data, int columns, char **colums_data, char **colums_name);
 static int sqlite_get_items_amount(SQLITE_CONTEXT *ctx);
 
 REPOSITORY_BASE *sqlite_create_database(void)
@@ -53,6 +53,21 @@ REPOSITORY_BASE *sqlite_create_database(void)
     }
 
     return repository;
+}
+
+static int select_callback(void *user_data, int columns, char **columns_data, char **columns_name)
+{
+
+    SQLITE_PERSON_T *person = (SQLITE_PERSON_T *)user_data;
+
+    person->list[person->amount].id = atoi(columns_data[id_pos]);
+    strncpy(person->list[person->amount].name, columns_data[name_pos], PERSON_NAME_LEN);
+    strncpy(person->list[person->amount].address, columns_data[address_pos], PERSON_ADDRESS_LEN);
+    person->list[person->amount].age = atoi(columns_data[age_pos]);
+
+    person->amount++;
+
+    return 0;
 }
 
 bool sqlite_destroy_database(REPOSITORY_BASE *repository)
@@ -121,21 +136,22 @@ static bool sqlite_recovery_list(void *object, PERSON_T **person_list, int *item
             break;
 
         sql_person.list = (PERSON_T *)malloc(sizeof(PERSON_T) * (*items_amount));
-
         if (sql_person.list == NULL)
             break;
 
+        sqlite_database_open(ctx);
+
+        ret = sqlite3_exec(ctx->db_connection, query, select_callback, &sql_person, &error_msg);
+        if (ret != SQLITE_OK)
+        {
+            fprintf(stderr, "SQL list error: %s\n", error_msg);
+            sqlite3_free(error_msg);
+            break;
+        }
+
+        *person_list = sql_person.list;
+
     } while (false);
-
-    sqlite_database_open(ctx);
-
-    ret = sqlite3_exec(ctx->db_connection, query, select_callback, &sql_person, &error_msg);
-    if (ret != SQLITE_OK)
-    {
-        fprintf(stderr, "SQL list error: %s\n", error_msg);
-        sqlite3_free(error_msg);
-        status = false;
-    }
 
     sqlite3_close(ctx->db_connection);
 
@@ -257,20 +273,6 @@ static bool sqlite_delete(SQLITE_CONTEXT *ctx, const PERSON_T *person)
     return status;
 }
 
-static int select_callback(void *user_data, int colums, char **colums_data, char **colums_name)
-{
-    SQLITE_PERSON_T *person = (SQLITE_PERSON_T *)user_data;
-
-    person->list[person->amount].id = atoi(colums_data[id_pos]);
-    strncpy(person->list[person->amount].name, colums_data[name_pos], PERSON_NAME_LEN);
-    strncpy(person->list[person->amount].address, colums_data[address_pos], PERSON_ADDRESS_LEN);
-    person->list[person->amount].age = atoi(colums_data[age_pos]);
-
-    person->amount++;
-
-    return 0;
-}
-
 int sqlite_get_items_amount(SQLITE_CONTEXT *ctx)
 {
     int rc;
@@ -286,6 +288,10 @@ int sqlite_get_items_amount(SQLITE_CONTEXT *ctx)
     {
         rc = sqlite3_prepare_v2(ctx->db_connection, query, -1, &stmt, NULL);
         if (rc != SQLITE_OK)
+            break;
+
+        rc = sqlite3_step(stmt);
+        if (rc != SQLITE_ROW)
             break;
 
         row_count = sqlite3_column_int(stmt, 0);
