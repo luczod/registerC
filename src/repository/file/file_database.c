@@ -24,6 +24,19 @@ REPOSITORY_BASE *file_create_database(void)
     return repository;
 }
 
+bool file_destroy_database(REPOSITORY_BASE *repository)
+{
+    bool status = false;
+
+    if (repository != NULL)
+    {
+        free(repository);
+        status = true;
+    }
+
+    return status;
+}
+
 static bool file_insert(void *object, const PERSON_T *person)
 {
     FILE *file;
@@ -55,6 +68,7 @@ static bool file_store(void *object, STORE_ACTION_T *store)
         state = file_insert(object, store->person);
         break;
     case repo_delete:
+        memset(&store->person[store->id], 0, sizeof(PERSON_T));
     case repo_update:
         state = file_store_list(object, store->person, store->amount);
         break;

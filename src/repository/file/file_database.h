@@ -9,5 +9,6 @@
 #define DATABASE_FILE "database.txt"
 
 REPOSITORY_BASE *file_create_database(void);
+bool file_destroy_database(REPOSITORY_BASE *repository);
 
 #endif /* FILE_DATABASE_H */
