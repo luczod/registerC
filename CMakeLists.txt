@@ -20,7 +20,6 @@ target_sources(registerC
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/src/main.c
     ${CMAKE_CURRENT_LIST_DIR}/src/person.c
-    ${CMAKE_CURRENT_LIST_DIR}/src/menu.c
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_add.c
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_delete.c
     ${CMAKE_CURRENT_LIST_DIR}/src/use_cases/person_update.c
@@ -31,6 +30,11 @@ target_sources(registerC
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite/sqlite_database.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository.c
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/repository_factory.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/view_factory.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli/cli.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/cli/menu/menu.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/view/gtk/gtk.c
+    ${CMAKE_CURRENT_LIST_DIR}/src/application.c
     )
 
 target_include_directories(registerC
@@ -38,4 +42,6 @@ target_include_directories(registerC
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/file
     ${CMAKE_CURRENT_LIST_DIR}/src/repository/sqlite
+    ${CMAKE_CURRENT_LIST_DIR}/src/viw/cli
+    ${CMAKE_CURRENT_LIST_DIR}/src/viw/gtk
     )

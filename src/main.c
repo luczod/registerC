@@ -3,28 +3,40 @@
 #include <string.h>
 #include "menu_register.h"
 #include "repository_factory.h"
+#include "application.h"
+#include "view_factory.h"
 
 #define REPOSITORY_TYPE "sqlite"
+#define VIEW_TYPE "cli"
 
 int main(void)
 {
-    int option;
 
-    // REPOSITORY_BASE *repository = repopository_create("file");
-    REPOSITORY_BASE *repository = repopository_create(REPOSITORY_TYPE);
-    if (repository == NULL)
-        return EXIT_FAILURE;
+    REPOSITORY_BASE *repository = NULL;
+    VIEW_BASE *view = NULL;
+    APPLICATION_T app;
+    bool ret;
 
-    while (true)
+    do
     {
-        print_menu();
-        scanf("%d", &option);
-        getchar();
-        option_select(option, repository);
-    }
+        repository = repopository_create(REPOSITORY_TYPE);
+        if (repository == NULL)
+            break;
 
-    // free(repository);
+        view = view_create(VIEW_TYPE);
+        if (view == NULL)
+            break;
+
+        ret = application_init(&app, view, repository);
+        if (ret == false)
+            break;
+
+        application_run(&app);
+
+    } while (false);
+
     repository_destroy(REPOSITORY_TYPE, repository);
+    view_destroy(VIEW_TYPE, view);
 
     return EXIT_SUCCESS;
 }
