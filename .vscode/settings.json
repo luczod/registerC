@@ -19,6 +19,8 @@
         "sqlite_database.h": "c",
         "application.h": "c",
         "cli.h": "c",
-        "view_base.h": "c"
+        "view_base.h": "c",
+        "person_repository_base.h": "c",
+        "person_repository_file.h": "c"
     },
 }
