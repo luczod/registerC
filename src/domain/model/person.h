@@ -12,7 +12,6 @@ typedef struct PERSON_T
     int age;
 } PERSON_T;
 
-PERSON_T person_create(void);
-char *person_input_name(void);
+PERSON_T person_create(const char *name, const char *address, const int age);
 
 #endif /* PERSON_H*/

@@ -23,7 +23,7 @@ void use_case_person_update(REPOSITORY_BASE *repository)
     {
         if (strncmp(name_update, person_list[i].name, PERSON_NAME_LEN) == 0)
         {
-            id = 1;
+            id = i;
             break;
         }
     }
