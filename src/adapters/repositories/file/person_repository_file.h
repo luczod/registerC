@@ -18,6 +18,6 @@ bool person_repository_file_init(PERSON_REPOSITORY_FILE_T *file);
 bool person_repository_file_open(PERSON_REPOSITORY_FILE_T *file);
 bool person_repository_file_close(PERSON_REPOSITORY_FILE_T *file);
 
-PERSON_REPOSITORY_FILE_T person_repository_file_create(void);
+PERSON_REPOSITORY_BASE_T person_repository_file_create(void);
 
 #endif /* PERSON_REPOSITORY_FILE_H */

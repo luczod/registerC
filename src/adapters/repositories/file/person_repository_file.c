@@ -58,8 +58,14 @@ bool person_repository_file_close(PERSON_REPOSITORY_FILE_T *file)
     return status;
 }
 
-PERSON_REPOSITORY_FILE_T person_repository_file_create(void)
+PERSON_REPOSITORY_BASE_T person_repository_file_create(void)
 {
+    static PERSON_REPOSITORY_FILE_T file;
+
+    person_repository_file_init(&file);
+    person_repository_file_open(&file);
+
+    return file.base;
 }
 
 static bool person_repository_file_add(void *object, PERSON_T *person)

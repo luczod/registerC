@@ -21,6 +21,8 @@
         "cli.h": "c",
         "view_base.h": "c",
         "person_repository_base.h": "c",
-        "person_repository_file.h": "c"
+        "person_repository_file.h": "c",
+        "person_repository_factory.h": "c",
+        "person_repository_sqlite.h": "c"
     },
 }
