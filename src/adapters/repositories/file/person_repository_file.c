@@ -165,7 +165,7 @@ static bool person_repository_file_find(void *object, PERSON_T *person)
 
         for (unsigned int i = 0; i < amount; i++)
         {
-            char *found = strstr(person_list[i].name, person->name);
+            char *found = strstr(person_list[i].id, person->id);
             if (found != NULL)
             {
                 memcpy(person, &person_list[i], sizeof(PERSON_T));
@@ -228,7 +228,9 @@ static bool person_repository_file_read_all(PERSON_T **person_list, unsigned int
         {
             char buffer[DB_FORMAT_LEN] = "";
             fgets(buffer, DB_FORMAT_LEN, file);
+
             person_repository_file_parser(buffer, &_person_list[i]);
+            _person_list[i].id = i + 1;
         }
 
         *person_list = _person_list;
@@ -280,10 +282,10 @@ static bool person_repository_file_parser(char *buffer, PERSON_T *person)
 {
     bool status = false;
 
-    if (buffer == NULL || person == NULL)
+    if (buffer != NULL || person != NULL)
     {
-        char *temp = (char *)buffer;
-        char *data = strtok(temp, ",");
+        // char *temp = (char *)buffer;
+        char *data = strtok(buffer, ",");
         strncpy(person->name, data, PERSON_NAME_LEN);
 
         data = strtok(NULL, ",");
@@ -294,5 +296,6 @@ static bool person_repository_file_parser(char *buffer, PERSON_T *person)
 
         status = true;
     }
+
     return status;
 }

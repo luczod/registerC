@@ -248,6 +248,7 @@ static void person_controller_cli_print(PERSON_CONTROLLER_CLI_T *cli_controller,
     for (unsigned int i = 0; i < amount; i++)
     {
         PERSON_T *person = (PERSON_T *)&person_list[i];
+
         printf("ID: %d, Name: %s, Address: %s, Age: %d\n", person->id, person->name, person->address, person->age);
     }
 }

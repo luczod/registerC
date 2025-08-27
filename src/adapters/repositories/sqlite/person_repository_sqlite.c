@@ -319,6 +319,7 @@ static bool person_repository_sqlite_getall(void *object, PERSON_T **person_list
         }
 
         *person_list = sql_person.list;
+        status = true;
 
     } while (false);
 
