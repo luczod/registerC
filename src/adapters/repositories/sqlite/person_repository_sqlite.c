@@ -34,8 +34,8 @@ PERSON_REPOSITORY_BASE_T person_repository_sqlite_create(void)
 {
     static PERSON_REPOSITORY_SQLITE_T sqlite;
 
-    person_repository_file_init(&sqlite);
-    person_repository_file_open(&sqlite);
+    person_repository_sqlite_init(&sqlite);
+    person_repository_sqlite_open(&sqlite);
 
     return sqlite.base;
 }

@@ -8,12 +8,12 @@ PERSON_REPOSITORY_BASE_T person_repository_create(PERSON_REPOSITORY_TYPE type)
 
     if (type == PERSON_REPOSITORY_TYPE_FILE)
     {
-        base = person_repository_create(type);
+        base = person_repository_file_create();
     }
 
     if (type == PERSON_REPOSITORY_TYPE_SQLITE)
     {
-        base = person_repository_create(type);
+        base = person_repository_sqlite_create();
     }
 
     return base;

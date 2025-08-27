@@ -73,7 +73,7 @@ static bool person_repository_file_add(void *object, PERSON_T *person)
     char format[DB_FORMAT_LEN + 1] = "";
     PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
 
-    if (file_is_database_exist() == false)
+    if (person_repository_file_is_database_exist() == false)
     {
         file->descriptor = (void *)fopen(DB_DATABASE_FILE, "w");
     }
@@ -92,7 +92,7 @@ static bool person_repository_file_add(void *object, PERSON_T *person)
 static bool person_repository_file_remove(void *object, PERSON_T *person)
 {
     bool status = false;
-    PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
+    // PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
 
     PERSON_T *person_list = NULL;
     unsigned int amount = 0;
@@ -122,7 +122,7 @@ static bool person_repository_file_remove(void *object, PERSON_T *person)
 static bool person_repository_file_update(void *object, PERSON_T *person)
 {
     bool status = false;
-    PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
+    // PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
 
     PERSON_T *person_list = NULL;
     unsigned int amount = 0;
@@ -137,7 +137,7 @@ static bool person_repository_file_update(void *object, PERSON_T *person)
         {
             if (person->id == person_list[i].id)
             {
-                memcpy(&person_list[i], 0, sizeof(PERSON_T));
+                memset(&person_list[i], 0, sizeof(PERSON_T));
                 person_repository_file_write_all(person_list, amount);
                 free(person_list);
                 status = true;
@@ -152,7 +152,7 @@ static bool person_repository_file_update(void *object, PERSON_T *person)
 static bool person_repository_file_find(void *object, PERSON_T *person)
 {
     bool status = false;
-    PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
+    // PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
 
     PERSON_T *person_list = NULL;
     unsigned int amount = 0;
@@ -183,7 +183,7 @@ static bool person_repository_file_find(void *object, PERSON_T *person)
 static bool person_repository_file_getall(void *object, PERSON_T **person_list, unsigned int *amount)
 {
     bool status = false;
-    PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
+    // PERSON_REPOSITORY_FILE_T *file = (PERSON_REPOSITORY_FILE_T *)object;
 
     unsigned int _amount = 0;
 
@@ -228,7 +228,7 @@ static bool person_repository_file_read_all(PERSON_T **person_list, unsigned int
         {
             char buffer[DB_FORMAT_LEN] = "";
             fgets(buffer, DB_FORMAT_LEN, file);
-            person_parser(buffer, &_person_list[i]);
+            person_repository_file_parser(buffer, &_person_list[i]);
         }
 
         *person_list = _person_list;
@@ -244,7 +244,7 @@ static unsigned int person_repository_file_count_items(void)
     FILE *file;
     int items = 0;
 
-    if (file_is_database_exist())
+    if (person_repository_file_is_database_exist())
         file = fopen(DB_DATABASE_FILE, "r");
     else
         return -1;
@@ -283,7 +283,7 @@ static bool person_repository_file_parser(char *buffer, PERSON_T *person)
     if (buffer == NULL || person == NULL)
     {
         char *temp = (char *)buffer;
-        char *data = strtok(buffer, ",");
+        char *data = strtok(temp, ",");
         strncpy(person->name, data, PERSON_NAME_LEN);
 
         data = strtok(NULL, ",");

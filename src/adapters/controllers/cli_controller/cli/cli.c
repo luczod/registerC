@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "cli.h"
 
 static void cli_print_menu(CLI_T *cli);
@@ -52,10 +53,10 @@ static void cli_print_menu(CLI_T *cli)
     for (uint8_t i = 0; i < cli->option_amount; i++)
     {
         CLI_OPTION_T *option = &cli->option_list[i];
-        fprint(stdout, "%d, %s\n", option->index, option->text);
+        fprintf(stdout, "%d. %s\n", option->index, option->text);
     }
 
-    fprint(stdout, "0. Quit\n");
+    fprintf(stdout, "0. Quit\n\n");
 }
 
 static uint8_t cli_get_option(CLI_T *cli)
@@ -88,7 +89,7 @@ static void cli_option_exec(CLI_T *cli, uint8_t choose, void *data)
 
     if (i == cli->option_amount)
     {
-        printf("This option is not available.");
+        printf("Exit --------");
     }
 
     printf("\n\n");

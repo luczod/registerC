@@ -1,42 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include "menu_register.h"
-#include "repository_factory.h"
-#include "application.h"
-#include "view_factory.h"
-
-#define REPOSITORY_TYPE "sqlite"
-#define VIEW_TYPE "cli"
+#include "person_service.h"
+#include "person_repository_factory.h"
+#include "person_controller_factory.h"
 
 int main(void)
 {
 
-    REPOSITORY_BASE *repository = NULL;
-    VIEW_BASE *view = NULL;
-    APPLICATION_T app;
-    bool ret;
+    PERSON_REPOSITORY_BASE_T repository = person_repository_create(PERSON_REPOSITORY_TYPE_FILE);
 
-    do
-    {
-        repository = repopository_create(REPOSITORY_TYPE);
-        if (repository == NULL)
-            break;
+    PERSON_SERVICE_T service;
+    person_service_init(&service);
+    person_service_open(&service, (PERSON_REPOSITORY_BASE_T *)&repository);
 
-        view = view_create(VIEW_TYPE);
-        if (view == NULL)
-            break;
+    PERSON_CONTROLLER_BASE_T controller = person_controller_factory_create(PERSON_CONTROLLER_TYPE_CLI, &service);
+    controller.run(controller.object);
 
-        ret = application_init(&app, view, repository);
-        if (ret == false)
-            break;
-
-        application_run(&app);
-
-    } while (false);
-
-    repository_destroy(REPOSITORY_TYPE, repository);
-    view_destroy(VIEW_TYPE, view);
+    controller.close(controller.object);
+    person_service_close(&service);
 
     return EXIT_SUCCESS;
 }
