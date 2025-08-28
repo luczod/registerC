@@ -7,7 +7,7 @@
 int main(void)
 {
 
-    PERSON_REPOSITORY_BASE_T repository = person_repository_create(PERSON_REPOSITORY_TYPE_FILE);
+    PERSON_REPOSITORY_BASE_T repository = person_repository_create(PERSON_REPOSITORY_TYPE_SQLITE);
 
     PERSON_SERVICE_T service;
     person_service_init(&service);
