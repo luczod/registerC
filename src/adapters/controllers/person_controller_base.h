@@ -14,7 +14,7 @@ typedef struct PERSON_CONTROLLER_BASE_T
 {
     void *object;
     bool (*init)(void *object);
-    bool (*open)(void *object, PERSON_SERVICE_T *service);
+    bool (*open)(void *object, PERSON_CONTROLLER_ARGS_T *args);
     bool (*run)(void *object);
     bool (*close)(void *object);
 } PERSON_CONTROLLER_BASE_T;

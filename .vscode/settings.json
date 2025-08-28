@@ -26,6 +26,10 @@
         "person_repository_sqlite.h": "c",
         "person_controller_base.h": "c",
         "person_controller_factory.h": "c",
-        "person_service.h": "c"
+        "person_service.h": "c",
+        "main_window.h": "c",
+        "person_controller_gtk.h": "c",
+        "person_controller_cli.h": "c",
+        "gtkwidget.h": "c"
     },
 }

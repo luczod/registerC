@@ -55,15 +55,15 @@ bool person_controller_cli_init(void *object)
     return status;
 }
 
-bool person_controller_cli_open(void *object, PERSON_SERVICE_T *service)
+bool person_controller_cli_open(void *object, PERSON_CONTROLLER_ARGS_T *args)
 {
     bool status = false;
 
-    if (object != NULL && service != NULL)
+    if (object != NULL && args->service != NULL)
     {
         PERSON_CONTROLLER_CLI_T *cli_controller = (PERSON_CONTROLLER_CLI_T *)object;
 
-        cli_controller->service = service;
+        cli_controller->service = args->service;
 
         cli_open(&cli_controller->cli, options_list, sizeof(options_list) / sizeof(options_list[0]));
         status = true;
@@ -96,12 +96,12 @@ bool person_controller_cli_close(void *object)
     return status;
 }
 
-PERSON_CONTROLLER_BASE_T person_controller_cli_create(PERSON_SERVICE_T *service)
+PERSON_CONTROLLER_BASE_T person_controller_cli_create(PERSON_CONTROLLER_ARGS_T *args)
 {
     static PERSON_CONTROLLER_CLI_T cli_controller;
 
     person_controller_cli_init(&cli_controller);
-    person_controller_cli_open(&cli_controller, service);
+    person_controller_cli_open(&cli_controller, args);
 
     return cli_controller.base;
 }
