@@ -25,6 +25,7 @@
         "person_repository_factory.h": "c",
         "person_repository_sqlite.h": "c",
         "person_controller_base.h": "c",
-        "person_controller_factory.h": "c"
+        "person_controller_factory.h": "c",
+        "person_service.h": "c"
     },
 }
