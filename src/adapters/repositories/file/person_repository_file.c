@@ -137,7 +137,7 @@ static bool person_repository_file_update(void *object, PERSON_T *person)
         {
             if (person->id == person_list[i].id)
             {
-                memset(&person_list[i], 0, sizeof(PERSON_T));
+                memcpy(&person_list[i], person, sizeof(PERSON_T));
                 person_repository_file_write_all(person_list, amount);
                 free(person_list);
                 status = true;
@@ -165,7 +165,7 @@ static bool person_repository_file_find(void *object, PERSON_T *person)
 
         for (unsigned int i = 0; i < amount; i++)
         {
-            char *found = strstr(person_list[i].id, person->id);
+            char *found = strstr(person_list[i].name, person->name);
             if (found != NULL)
             {
                 memcpy(person, &person_list[i], sizeof(PERSON_T));
