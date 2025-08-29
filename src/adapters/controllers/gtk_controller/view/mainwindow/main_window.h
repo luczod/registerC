@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include "insert_dialog.h"
 #include "edit_dialog.h"
+#include "view_base.h"
 
 typedef struct MAIN_WINDOW_WIDGETS_T
 {
@@ -19,6 +20,7 @@ typedef struct MAIN_WINDOW_WIDGETS_T
 
 typedef struct MAIN_WINDOW_T
 {
+    VIEW_BASE_T base;
     MAIN_WINDOW_WIDGETS_T *widgets;
     INSERT_DIALOG_T insert;
     EDIT_DIALOG_T edit;
