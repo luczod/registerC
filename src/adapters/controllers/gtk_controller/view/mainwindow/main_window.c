@@ -85,10 +85,37 @@ static bool main_window_graphic_init(MAIN_WINDOW_T *window)
     }
 
     window->widgets->window = GTK_WIDGET(gtk_builder_get_object(builder, "window_main"));
+    window->widgets->person_treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "person_treeview"));
+    window->widgets->person_model = GTK_TREE_MODEL(gtk_builder_get_object(builder, "person_model"));
+
+    window->widgets->input_search = GTK_ENTRY(gtk_builder_get_object(builder, "input_search"));
+    window->widgets->bt_insert = GTK_BUTTON(gtk_builder_get_object(builder, "bt_insert"));
+    window->widgets->bt_delete = GTK_BUTTON(gtk_builder_get_object(builder, "bt_delete"));
+    window->widgets->bt_edit = GTK_BUTTON(gtk_builder_get_object(builder, "bt_edit"));
 
     gtk_builder_connect_signals(builder, window);
 
     g_object_unref(builder);
 
     return true;
+}
+
+void on_bt_insert_clicked(GtkButton *bt_insert, void *data)
+{
+    printf("insert\n");
+}
+
+void on_bt_edit_clicked(GtkButton *bt_edit, void *data)
+{
+    printf("edit\n");
+}
+
+void on_bt_delete_clicked(GtkButton *bt_delete, void *data)
+{
+    printf("delete\n");
+}
+
+void on_window_main_destroy(void)
+{
+    gtk_main_quit();
 }

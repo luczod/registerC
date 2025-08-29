@@ -7,6 +7,12 @@
 typedef struct MAIN_WINDOW_WIDGETS_T
 {
     void *window;
+    void *input_search;
+    void *person_model;
+    void *person_treeview;
+    void *bt_insert;
+    void *bt_edit;
+    void *bt_delete;
 } MAIN_WINDOW_WIDGETS_T;
 
 typedef struct MAIN_WINDOW_T
