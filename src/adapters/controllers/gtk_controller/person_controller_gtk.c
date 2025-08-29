@@ -22,6 +22,7 @@ bool person_controller_gtk_init(void *object)
 
         status = gtk_view_init(&gtk_controller->view);
     }
+
     return status;
 }
 

@@ -41,6 +41,7 @@ if (PKG_CONFIG_FOUND)
         target_include_directories(registerC
             PUBLIC
             ${CMAKE_CURRENT_LIST_DIR}/include
+            ${CMAKE_CURRENT_LIST_DIR}/resources
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/model
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/services

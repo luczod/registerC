@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         .service = &service,
     };
 
-    PERSON_CONTROLLER_BASE_T controller = person_controller_factory_create(PERSON_CONTROLLER_TYPE_CLI, &args);
+    PERSON_CONTROLLER_BASE_T controller = person_controller_factory_create(PERSON_CONTROLLER_TYPE_GTK, &args);
     controller.run(controller.object);
 
     controller.close(controller.object);
