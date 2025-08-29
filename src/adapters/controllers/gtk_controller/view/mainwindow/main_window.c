@@ -15,7 +15,11 @@ bool main_window_init(MAIN_WINDOW_T *window)
     if (window != NULL)
     {
         memset(window, 0, sizeof(MAIN_WINDOW_T));
-        status = true;
+
+        if (insert_dialog_init(&window->insert) == true && edit_dialog_init(&window->edit) == true)
+        {
+            status = true;
+        }
     }
 
     return status;
@@ -78,7 +82,7 @@ static bool main_window_graphic_init(MAIN_WINDOW_T *window)
 
     if (err)
     {
-        g_printerr("Error loading UI: %s\n", err->message);
+        g_printerr("Error loading UI main: %s\n", err->message);
         g_error_free(err);
 
         exit(EXIT_FAILURE);
@@ -102,12 +106,34 @@ static bool main_window_graphic_init(MAIN_WINDOW_T *window)
 
 void on_bt_insert_clicked(GtkButton *bt_insert, void *data)
 {
-    printf("insert\n");
+    printf("------ insert------\n");
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
+
+    INSERT_DIALOG_ARGS_T args = {
+        .argc = mw->argc,
+        .argv = mw->argv,
+        .parent = mw->widgets->window,
+    };
+
+    insert_dialog_open(&mw->insert, &args);
+    insert_dialog_run(&mw->insert);
+    insert_dialog_close(&mw->insert);
 }
 
 void on_bt_edit_clicked(GtkButton *bt_edit, void *data)
 {
-    printf("edit\n");
+    printf("------ edit------\n");
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
+
+    EDIT_DIALOG_ARGS_T args = {
+        .argc = mw->argc,
+        .argv = mw->argv,
+        .parent = mw->widgets->window,
+    };
+
+    edit_dialog_open(&mw->edit, &args);
+    edit_dialog_run(&mw->edit);
+    edit_dialog_close(&mw->edit);
 }
 
 void on_bt_delete_clicked(GtkButton *bt_delete, void *data)

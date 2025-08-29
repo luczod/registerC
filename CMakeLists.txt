@@ -35,13 +35,14 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/person_controller_gtk.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/gtk_view.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/mainwindow/main_window.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/insertdialog/insert_dialog.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog/edit_dialog.c
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
         )
 
         target_include_directories(registerC
             PUBLIC
             ${CMAKE_CURRENT_LIST_DIR}/include
-            ${CMAKE_CURRENT_LIST_DIR}/resources
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/model
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/services
@@ -54,6 +55,8 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/mainwindow
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/insertdialog
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog
         )
 
         target_link_libraries(registerC ${GTK_LIBRARIES} sqlite3)

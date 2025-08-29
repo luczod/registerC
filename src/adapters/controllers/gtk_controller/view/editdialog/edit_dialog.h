@@ -26,9 +26,9 @@ typedef struct EDIT_DIALOG_ARGS_T
     char **argv;
 } EDIT_DIALOG_ARGS_T;
 
-bool insert_dialog_init(EDIT_DIALOG_T *dialog);
-bool insert_dialog_open(EDIT_DIALOG_T *dialog, EDIT_DIALOG_ARGS_T *args);
-bool insert_dialog_run(EDIT_DIALOG_T *dialog);
-bool insert_dialog_close(EDIT_DIALOG_T *dialog);
+bool edit_dialog_init(EDIT_DIALOG_T *dialog);
+bool edit_dialog_open(EDIT_DIALOG_T *dialog, EDIT_DIALOG_ARGS_T *args);
+bool edit_dialog_run(EDIT_DIALOG_T *dialog);
+bool edit_dialog_close(EDIT_DIALOG_T *dialog);
 
 #endif /* EDIT_DIALOG_H */
