@@ -1,6 +1,12 @@
 services:
       app:
-          container_name: "registerc-dev"
-          build: .
-          volumes:
-                - .:/registerC
+            container_name: "registerc-dev"
+            build: .
+            volumes:
+                  - .:/registerC
+                  - /tmp/.X11-unix:/tmp/./X11-unix
+            environment:
+                  - DISPLAY=${DISPLAY}
+            network_mode: host
+
+
