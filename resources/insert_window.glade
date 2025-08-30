@@ -66,7 +66,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">5</property>
             <child>
-              <object class="GtkBox" id="txt_name">
+              <object class="GtkBox" id="box_name">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-top">5</property>
@@ -85,7 +85,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txt_name">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="margin-end">5</property>
@@ -104,7 +104,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="txt_addres">
+              <object class="GtkBox" id="box_address">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-top">5</property>
@@ -123,7 +123,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txt_address">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="margin-end">5</property>
@@ -142,7 +142,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="txt_age">
+              <object class="GtkBox" id="box_age">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-top">5</property>
@@ -161,7 +161,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="txt_age">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="width-chars">4</property>

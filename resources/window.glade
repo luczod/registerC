@@ -118,13 +118,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="bt_search">
+              <object class="GtkButton" id="bt_find">
                 <property name="label" translatable="yes">find</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="margin-end">9</property>
-                <signal name="clicked" handler="on_bt_search_clicked" swapped="no"/>
+                <signal name="clicked" handler="on_bt_find_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>

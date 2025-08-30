@@ -25,7 +25,7 @@ typedef struct VIEW_BASE_T
 {
     void *object;
     void (*set_all_persons)(void *object, PERSON_T *list, unsigned int amount);
-    void (*show_dialog_message)(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type);
+    int (*show_dialog_message)(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type);
 } VIEW_BASE_T;
 
 #endif /* VIEW_H */

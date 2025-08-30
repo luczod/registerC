@@ -17,7 +17,7 @@ typedef struct MAIN_WINDOW_WIDGETS_T
     void *bt_insert;
     void *bt_edit;
     void *bt_delete;
-    void *bt_search;
+    void *bt_find;
 } MAIN_WINDOW_WIDGETS_T;
 
 typedef struct MAIN_WINDOW_T

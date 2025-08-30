@@ -24,6 +24,7 @@ bool insert_dialog_open(INSERT_DIALOG_T *dialog, INSERT_DIALOG_ARGS_T *args)
 
     if (dialog != NULL && args != NULL)
     {
+        dialog->con = args->con;
         status = insert_dialog_graphics_init(dialog);
     }
 
@@ -69,11 +70,11 @@ bool insert_dialog_graphics_init(INSERT_DIALOG_T *dialog)
     gtk_builder_add_from_file(builder, "resources/insert_window.glade", NULL);
 
     dialog->widgets->dialog = GTK_WIDGET(gtk_builder_get_object(builder, "insert_window"));
-    dialog->widgets->txt_name = GTK_WIDGET(gtk_builder_get_object(builder, "txt_name"));
-    dialog->widgets->txt_address = GTK_WIDGET(gtk_builder_get_object(builder, "txt_address"));
-    dialog->widgets->txt_age = GTK_WIDGET(gtk_builder_get_object(builder, "txt_age"));
-    dialog->widgets->bt_cancel = GTK_WIDGET(gtk_builder_get_object(builder, "bt_cancel"));
-    dialog->widgets->bt_confirm = GTK_WIDGET(gtk_builder_get_object(builder, "bt_confirm"));
+    dialog->widgets->txt_name = GTK_ENTRY(gtk_builder_get_object(builder, "txt_name"));
+    dialog->widgets->txt_address = GTK_ENTRY(gtk_builder_get_object(builder, "txt_address"));
+    dialog->widgets->txt_age = GTK_ENTRY(gtk_builder_get_object(builder, "txt_age"));
+    dialog->widgets->bt_cancel = GTK_BUTTON(gtk_builder_get_object(builder, "bt_cancel"));
+    dialog->widgets->bt_confirm = GTK_BUTTON(gtk_builder_get_object(builder, "bt_confirm"));
 
     gtk_builder_connect_signals(builder, dialog);
 
@@ -88,8 +89,15 @@ void on_insert_window_destroy(void)
 
 void on_bt_insert_confirm_clicked(GtkButton *bt_confirm, void *data)
 {
-    // INSERT_DIALOG_T *dialog = (INSERT_DIALOG_T *)data;
-    printf("confirm\n");
+    INSERT_DIALOG_T *dialog = (INSERT_DIALOG_T *)data;
+
+    char *name = (char *)gtk_entry_get_text(dialog->widgets->txt_name);
+    char *address = (char *)gtk_entry_get_text(dialog->widgets->txt_address);
+    char *age = (char *)gtk_entry_get_text(dialog->widgets->txt_age);
+
+    dialog->con->on_add(dialog->con->object, name, address, age);
+
+    gtk_widget_destroy(GTK_WIDGET(dialog->widgets->dialog));
 }
 
 void on_bt_insert_cancel_clicked(GtkButton *bt_cancel, void *data)

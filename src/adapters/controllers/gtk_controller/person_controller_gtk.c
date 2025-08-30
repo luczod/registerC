@@ -4,6 +4,8 @@
 #include "person_controller_gtk.h"
 #include "main_window.h"
 
+#define PERSON_CONTROLLER_BUFFER_SEARCH 1024
+
 static void person_controller_events_on_get(void *object);
 static void person_controller_events_on_add(void *object, char *name, char *address, char *age);
 static void person_controller_events_on_update(void *object, int id, char *name, char *address, char *age);
@@ -28,6 +30,8 @@ bool person_controller_gtk_init(void *object)
         gtk_controller->base.open = person_controller_gtk_open;
         gtk_controller->base.run = person_controller_gtk_run;
         gtk_controller->base.close = person_controller_gtk_close;
+
+        gtk_controller->events.object = gtk_controller;
 
         gtk_controller->events.on_get = person_controller_events_on_get;
         gtk_controller->events.on_add = person_controller_events_on_add;
@@ -71,9 +75,6 @@ bool person_controller_gtk_run(void *object)
 
     if (object != NULL)
     {
-        PERSON_CONTROLLER_GTK_T *gtk_controller = (PERSON_CONTROLLER_GTK_T *)object;
-        (void)gtk_controller;
-
         status = main_window_run(&main_window);
     }
 
@@ -88,7 +89,6 @@ bool person_controller_gtk_close(void *object)
     {
         PERSON_CONTROLLER_GTK_T *gtk_controller = (PERSON_CONTROLLER_GTK_T *)object;
 
-        // gtk_view_close(&gtk_controller->view);
         main_window_close(&main_window);
 
         memset(gtk_controller, 0, sizeof(PERSON_CONTROLLER_GTK_T));
@@ -123,16 +123,52 @@ static void person_controller_events_on_get(void *object)
 
 static void person_controller_events_on_add(void *object, char *name, char *address, char *age)
 {
+    PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
+    PERSON_T p = person_create(name, address, atoi(age));
+
+    con->service->repository->add(con->service->repository->object, &p);
 }
 
 static void person_controller_events_on_update(void *object, int id, char *name, char *address, char *age)
 {
+    // PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
 }
 
 static void person_controller_events_on_delete(void *object, int id)
 {
+    PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
+
+    PERSON_T p = {.id = id};
+
+    con->service->repository->remove(con->service->repository->object, &p);
 }
 
 static void person_controller_events_on_search(void *object, const char *name)
 {
+
+    char buffer[PERSON_CONTROLLER_BUFFER_SEARCH] = {0};
+    MESSAGE_TYPE_T type = MESSAGE_INFO;
+    DIALOG_BUTTON_T button_type = DIALOG_BUTTON_OK;
+
+    PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
+
+    char *message_found = "FOUND! - [ID: %d, NAME: %s, ADDRESS: %s, AGE: %d]";
+    char *message_error_str = "Item NOT found!";
+
+    PERSON_T p;
+    strncpy(p.name, name, PERSON_NAME_LEN);
+
+    bool status = con->service->repository->find(con->service->repository->object, &p);
+
+    if (status == true)
+    {
+        snprintf(buffer, PERSON_CONTROLLER_BUFFER_SEARCH, message_found, p.id, p.name, p.address, p.age);
+    }
+    else
+    {
+        type = MESSAGE_ERROR;
+        snprintf(buffer, PERSON_CONTROLLER_BUFFER_SEARCH, message_error_str);
+    }
+
+    con->view->show_dialog_message(con->view->object, buffer, type, button_type);
 }

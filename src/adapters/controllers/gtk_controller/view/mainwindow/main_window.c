@@ -16,7 +16,9 @@ typedef enum HEARDER_T
 
 static bool main_window_graphic_init(MAIN_WINDOW_T *window);
 static void main_window_set_all_persons(void *object, PERSON_T *list, unsigned int amount);
-static void main_window_show_dialog_message(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type);
+static int main_window_show_dialog_message(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type);
+static GtkMessageType main_window_get_type(MESSAGE_TYPE_T type);
+static void main_window_model_reload(MAIN_WINDOW_T *mw);
 
 bool main_window_init(MAIN_WINDOW_T *window)
 {
@@ -110,7 +112,7 @@ static bool main_window_graphic_init(MAIN_WINDOW_T *window)
     window->widgets->bt_insert = GTK_BUTTON(gtk_builder_get_object(builder, "bt_insert"));
     window->widgets->bt_delete = GTK_BUTTON(gtk_builder_get_object(builder, "bt_delete"));
     window->widgets->bt_edit = GTK_BUTTON(gtk_builder_get_object(builder, "bt_edit"));
-    window->widgets->bt_search = GTK_BUTTON(gtk_builder_get_object(builder, "bt_search"));
+    window->widgets->bt_find = GTK_BUTTON(gtk_builder_get_object(builder, "bt_find"));
 
     gtk_builder_connect_signals(builder, window);
 
@@ -128,37 +130,69 @@ void on_bt_insert_clicked(GtkButton *bt_insert, void *data)
         .argc = mw->argc,
         .argv = mw->argv,
         .parent = mw->widgets->window,
+        .con = mw->con,
     };
 
     insert_dialog_open(&mw->insert, &args);
     insert_dialog_run(&mw->insert);
     insert_dialog_close(&mw->insert);
+
+    main_window_model_reload(mw);
 }
 
 void on_bt_edit_clicked(GtkButton *bt_edit, void *data)
 {
     printf("------ edit------\n");
+
     MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
 
     EDIT_DIALOG_ARGS_T args = {
         .argc = mw->argc,
         .argv = mw->argv,
         .parent = mw->widgets->window,
+        .con = mw->con,
     };
 
     edit_dialog_open(&mw->edit, &args);
     edit_dialog_run(&mw->edit);
     edit_dialog_close(&mw->edit);
+
+    main_window_model_reload(mw);
 }
 
 void on_bt_delete_clicked(GtkButton *bt_delete, void *data)
 {
-    printf("delete\n");
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    GValue value = {
+        0,
+    };
+    int id;
+
+    selection = gtk_tree_view_get_selection(mw->widgets->person_treeview);
+    gboolean status = gtk_tree_selection_get_selected(selection, &model, &iter);
+
+    if (status == TRUE)
+    {
+        gtk_tree_model_get_value(model, &iter, PERSON_ID, &value);
+        id = g_value_get_int(&value);
+        mw->con->on_delete(mw->con->object, id);
+
+        main_window_model_reload(mw);
+    }
+
+    g_value_unset(&value);
 }
 
-void on_bt_search_clicked(GtkButton *bt_search, void *data)
+void on_bt_find_clicked(GtkButton *bt_find, void *data)
 {
-    printf("search\n");
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
+    const char *text = (const char *)gtk_entry_get_text(GTK_ENTRY(mw->widgets->input_search));
+
+    mw->con->on_search(mw->con->object, text);
 }
 
 void on_window_main_destroy(void)
@@ -192,7 +226,52 @@ void main_window_set_all_persons(void *object, PERSON_T *list, unsigned int amou
     }
 }
 
-void main_window_show_dialog_message(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type)
+static int main_window_show_dialog_message(void *object, const char *message, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type)
 {
-    // MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)object;
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)object;
+    int answer;
+
+    GtkWidget *d = gtk_message_dialog_new(GTK_WINDOW(mw->widgets->window),
+                                          GTK_DIALOG_MODAL,
+                                          main_window_get_type(type),
+                                          button_type,
+                                          "%s",
+                                          message);
+
+    answer = gtk_dialog_run(GTK_DIALOG(d));
+    gtk_widget_destroy(d);
+
+    return answer;
+}
+
+static GtkMessageType main_window_get_type(MESSAGE_TYPE_T type)
+{
+    GtkMessageType internal_type = GTK_MESSAGE_INFO;
+
+    switch (type)
+    {
+    case MESSAGE_INFO:
+        internal_type = GTK_MESSAGE_INFO;
+        break;
+    case MESSAGE_WARNING:
+        internal_type = GTK_MESSAGE_WARNING;
+        break;
+    case MESSAGE_ERROR:
+        internal_type = GTK_MESSAGE_ERROR;
+        break;
+    case MESSAGE_QUESTION:
+        internal_type = GTK_MESSAGE_QUESTION;
+        break;
+
+    default:
+        break;
+    }
+
+    return internal_type;
+}
+
+void main_window_model_reload(MAIN_WINDOW_T *mw)
+{
+    gtk_list_store_clear(GTK_LIST_STORE(mw->widgets->person_model));
+    mw->con->on_get(mw->con->object);
 }

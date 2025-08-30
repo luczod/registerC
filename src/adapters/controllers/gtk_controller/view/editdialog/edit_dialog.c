@@ -24,6 +24,12 @@ bool edit_dialog_open(EDIT_DIALOG_T *dialog, EDIT_DIALOG_ARGS_T *args)
 
     if (dialog != NULL && args != NULL)
     {
+        dialog->con = args->con;
+        dialog->id = args->id;
+        dialog->name = args->name;
+        dialog->address = args->address;
+        dialog->age = args->age;
+
         status = edit_dialog_graphics_init(dialog);
     }
 
