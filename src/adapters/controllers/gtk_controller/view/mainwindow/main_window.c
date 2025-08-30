@@ -1,12 +1,22 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "main_window.h"
 #include <gtk/gtk.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkwidget.h>
+#include "main_window.h"
+
+typedef enum HEARDER_T
+{
+    PERSON_ID,
+    PERSON_NAME,
+    PERSON_ADDRESS,
+    PERSON_AGE,
+} HEARDER_T;
 
 static bool main_window_graphic_init(MAIN_WINDOW_T *window);
+static void main_window_set_all_persons(void *object, PERSON_T *list, unsigned int amount);
+static void main_window_show_dialog_message(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type);
 
 bool main_window_init(MAIN_WINDOW_T *window)
 {
@@ -15,6 +25,9 @@ bool main_window_init(MAIN_WINDOW_T *window)
     if (window != NULL)
     {
         memset(window, 0, sizeof(MAIN_WINDOW_T));
+        window->base.object = window;
+        window->base.set_all_persons = main_window_set_all_persons;
+        window->base.show_dialog_message = main_window_show_dialog_message;
 
         if (insert_dialog_init(&window->insert) == true && edit_dialog_init(&window->edit) == true)
         {
@@ -33,6 +46,7 @@ bool main_window_open(MAIN_WINDOW_T *window, MAIN_WINDOW_ARGS_T *args)
     {
         window->argc = args->argc;
         window->argv = args->argv;
+        window->con = args->con;
 
         status = main_window_graphic_init(window);
     }
@@ -78,7 +92,7 @@ static bool main_window_graphic_init(MAIN_WINDOW_T *window)
     gtk_init(&window->argc, &window->argv);
     builder = gtk_builder_new();
 
-    gtk_builder_add_from_file(builder, "bin/resources/window.glade", &err);
+    gtk_builder_add_from_file(builder, "resources/window.glade", &err);
 
     if (err)
     {
@@ -96,6 +110,7 @@ static bool main_window_graphic_init(MAIN_WINDOW_T *window)
     window->widgets->bt_insert = GTK_BUTTON(gtk_builder_get_object(builder, "bt_insert"));
     window->widgets->bt_delete = GTK_BUTTON(gtk_builder_get_object(builder, "bt_delete"));
     window->widgets->bt_edit = GTK_BUTTON(gtk_builder_get_object(builder, "bt_edit"));
+    window->widgets->bt_search = GTK_BUTTON(gtk_builder_get_object(builder, "bt_search"));
 
     gtk_builder_connect_signals(builder, window);
 
@@ -141,7 +156,43 @@ void on_bt_delete_clicked(GtkButton *bt_delete, void *data)
     printf("delete\n");
 }
 
+void on_bt_search_clicked(GtkButton *bt_search, void *data)
+{
+    printf("search\n");
+}
+
 void on_window_main_destroy(void)
 {
     gtk_main_quit();
+}
+
+void on_window_main_show(GtkWidget *object, void *data)
+{
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
+    mw->con->on_get(mw->con->object);
+}
+
+void main_window_set_all_persons(void *object, PERSON_T *list, unsigned int amount)
+{
+    MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)object;
+
+    for (unsigned int i = 0; i < amount; i++)
+    {
+        GtkTreeIter iter;
+        PERSON_T *p = &list[i];
+
+        gtk_list_store_append(GTK_LIST_STORE(mw->widgets->person_model), &iter);
+
+        gtk_list_store_set(GTK_LIST_STORE(mw->widgets->person_model), &iter,
+                           PERSON_ID, p->id,
+                           PERSON_NAME, p->name,
+                           PERSON_ADDRESS, p->address,
+                           PERSON_AGE, p->age,
+                           -1);
+    }
+}
+
+void main_window_show_dialog_message(void *object, const char *list, MESSAGE_TYPE_T type, DIALOG_BUTTON_T button_type)
+{
+    // MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)object;
 }

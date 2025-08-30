@@ -21,6 +21,7 @@
     <property name="default-width">800</property>
     <property name="default-height">600</property>
     <signal name="destroy" handler="on_window_main_destroy" swapped="no"/>
+    <signal name="show" handler="on_window_main_show" swapped="no"/>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -96,7 +97,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">5</property>
-                <property name="margin-end">5</property>
                 <property name="label" translatable="yes">search:</property>
               </object>
               <packing>
@@ -115,6 +115,21 @@
                 <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="bt_search">
+                <property name="label" translatable="yes">find</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">True</property>
+                <property name="margin-end">9</property>
+                <signal name="clicked" handler="on_bt_search_clicked" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
@@ -141,9 +156,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="margin-start">5</property>
-                <property name="margin-end">5</property>
-                <property name="margin-top">5</property>
-                <property name="margin-bottom">5</property>
                 <signal name="clicked" handler="on_bt_insert_clicked" swapped="no"/>
               </object>
               <packing>
@@ -161,7 +173,7 @@
                 <signal name="clicked" handler="on_bt_edit_clicked" swapped="no"/>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
@@ -172,6 +184,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
+                <property name="margin-end">5</property>
                 <signal name="clicked" handler="on_bt_delete_clicked" swapped="no"/>
               </object>
               <packing>

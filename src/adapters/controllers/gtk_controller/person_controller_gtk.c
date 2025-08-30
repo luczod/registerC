@@ -29,8 +29,14 @@ bool person_controller_gtk_init(void *object)
         gtk_controller->base.run = person_controller_gtk_run;
         gtk_controller->base.close = person_controller_gtk_close;
 
-        // status = gtk_view_init(&gtk_controller->view);
+        gtk_controller->events.on_get = person_controller_events_on_get;
+        gtk_controller->events.on_add = person_controller_events_on_add;
+        gtk_controller->events.on_update = person_controller_events_on_update;
+        gtk_controller->events.on_delete = person_controller_events_on_delete;
+        gtk_controller->events.on_search = person_controller_events_on_search;
+
         status = main_window_init(&main_window);
+
         gtk_controller->view = &main_window.base;
     }
 
@@ -40,7 +46,7 @@ bool person_controller_gtk_init(void *object)
 bool person_controller_gtk_open(void *object, PERSON_CONTROLLER_ARGS_T *args)
 {
     bool status = false;
-    // GTK_VIEW_ARGS_T gtk_view_args;
+
     MAIN_WINDOW_ARGS_T main_window_args;
 
     if (object != NULL && args != NULL && args->service != NULL)
@@ -51,8 +57,8 @@ bool person_controller_gtk_open(void *object, PERSON_CONTROLLER_ARGS_T *args)
 
         main_window_args.argc = args->argc;
         main_window_args.argv = args->argv;
+        main_window_args.con = &gtk_controller->events;
 
-        // status = gtk_view_open(&gtk_controller->view, &main_window_args);
         status = main_window_open(&main_window, &main_window_args);
     }
 
@@ -67,7 +73,7 @@ bool person_controller_gtk_run(void *object)
     {
         PERSON_CONTROLLER_GTK_T *gtk_controller = (PERSON_CONTROLLER_GTK_T *)object;
         (void)gtk_controller;
-        // status = gtk_view_run(&gtk_controller->view);
+
         status = main_window_run(&main_window);
     }
 
@@ -104,6 +110,15 @@ PERSON_CONTROLLER_BASE_T person_controller_gtk_create(PERSON_CONTROLLER_ARGS_T *
 
 static void person_controller_events_on_get(void *object)
 {
+    PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
+    PERSON_T *list = NULL;
+    unsigned int amount = 0;
+
+    con->service->base.getall(con->service->base.object, &list, &amount);
+
+    con->view->set_all_persons(con->view->object, list, amount);
+
+    free(list);
 }
 
 static void person_controller_events_on_add(void *object, char *name, char *address, char *age)

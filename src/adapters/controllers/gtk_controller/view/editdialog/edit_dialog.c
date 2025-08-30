@@ -66,7 +66,7 @@ bool edit_dialog_graphics_init(EDIT_DIALOG_T *dialog)
 
     builder = gtk_builder_new();
 
-    gtk_builder_add_from_file(builder, "bin/resources/edit_window.glade", NULL);
+    gtk_builder_add_from_file(builder, "resources/edit_window.glade", NULL);
 
     dialog->widgets->dialog = GTK_WIDGET(gtk_builder_get_object(builder, "edit_window"));
     dialog->widgets->txt_name = GTK_WIDGET(gtk_builder_get_object(builder, "txt_name"));
