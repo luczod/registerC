@@ -30,7 +30,8 @@
         "main_window.h": "c",
         "person_controller_gtk.h": "c",
         "person_controller_cli.h": "c",
-        "gtkwidget.h": "c"
+        "gtkwidget.h": "c",
+        "text_encoding": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
 }

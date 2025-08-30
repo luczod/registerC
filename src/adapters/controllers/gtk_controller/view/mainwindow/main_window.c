@@ -146,18 +146,62 @@ void on_bt_edit_clicked(GtkButton *bt_edit, void *data)
 
     MAIN_WINDOW_T *mw = (MAIN_WINDOW_T *)data;
 
-    EDIT_DIALOG_ARGS_T args = {
-        .argc = mw->argc,
-        .argv = mw->argv,
-        .parent = mw->widgets->window,
-        .con = mw->con,
+    GtkTreeSelection *selection;
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    GValue value_id = {
+        0,
+    };
+    GValue value_name = {
+        0,
+    };
+    GValue value_address = {
+        0,
+    };
+    GValue value_age = {
+        0,
     };
 
-    edit_dialog_open(&mw->edit, &args);
-    edit_dialog_run(&mw->edit);
-    edit_dialog_close(&mw->edit);
+    selection = gtk_tree_view_get_selection(mw->widgets->person_treeview);
+    gboolean status = gtk_tree_selection_get_selected(selection, &model, &iter);
 
-    main_window_model_reload(mw);
+    if (status == TRUE)
+    {
+        gtk_tree_model_get_value(model, &iter, PERSON_ID, &value_id);
+        int id = g_value_get_int(&value_id);
+
+        gtk_tree_model_get_value(model, &iter, PERSON_NAME, &value_name);
+        char *name = (char *)g_value_get_string(&value_name);
+
+        gtk_tree_model_get_value(model, &iter, PERSON_ADDRESS, &value_address);
+        char *address = (char *)g_value_get_string(&value_address);
+
+        gtk_tree_model_get_value(model, &iter, PERSON_AGE, &value_age);
+        int age = g_value_get_int(&value_age);
+
+        EDIT_DIALOG_ARGS_T args = {
+            .argc = mw->argc,
+            .argv = mw->argv,
+            .parent = mw->widgets->window,
+            .con = mw->con,
+            .id = id,
+            .name = name,
+            .address = address,
+            .age = age,
+        };
+
+        edit_dialog_open(&mw->edit, &args);
+        edit_dialog_run(&mw->edit);
+        edit_dialog_close(&mw->edit);
+
+        main_window_model_reload(mw);
+
+        g_value_unset(&value_id);
+        g_value_unset(&value_name);
+        g_value_unset(&value_address);
+        g_value_unset(&value_age);
+    }
 }
 
 void on_bt_delete_clicked(GtkButton *bt_delete, void *data)
@@ -166,22 +210,26 @@ void on_bt_delete_clicked(GtkButton *bt_delete, void *data)
     GtkTreeSelection *selection;
     GtkTreeModel *model;
     GtkTreeIter iter;
+    int id;
 
     GValue value = {
         0,
     };
-    int id;
 
     selection = gtk_tree_view_get_selection(mw->widgets->person_treeview);
     gboolean status = gtk_tree_selection_get_selected(selection, &model, &iter);
 
     if (status == TRUE)
     {
-        gtk_tree_model_get_value(model, &iter, PERSON_ID, &value);
-        id = g_value_get_int(&value);
-        mw->con->on_delete(mw->con->object, id);
+        int answer = main_window_show_dialog_message(mw, "This register is about to be deleted. Are you sure?", MESSAGE_QUESTION, DIALOG_BUTTON_OK_CANCEL);
+        if (answer == GTK_RESPONSE_OK)
+        {
+            gtk_tree_model_get_value(model, &iter, PERSON_ID, &value);
+            id = g_value_get_int(&value);
+            mw->con->on_delete(mw->con->object, id);
 
-        main_window_model_reload(mw);
+            main_window_model_reload(mw);
+        }
     }
 
     g_value_unset(&value);

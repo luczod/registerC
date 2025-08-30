@@ -131,7 +131,11 @@ static void person_controller_events_on_add(void *object, char *name, char *addr
 
 static void person_controller_events_on_update(void *object, int id, char *name, char *address, char *age)
 {
-    // PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
+    PERSON_CONTROLLER_GTK_T *con = (PERSON_CONTROLLER_GTK_T *)object;
+    PERSON_T p = person_create(name, address, atoi(age));
+    p.id = id;
+
+    con->service->repository->update(con->service->repository->object, &p);
 }
 
 static void person_controller_events_on_delete(void *object, int id)
@@ -167,7 +171,7 @@ static void person_controller_events_on_search(void *object, const char *name)
     else
     {
         type = MESSAGE_ERROR;
-        snprintf(buffer, PERSON_CONTROLLER_BUFFER_SEARCH, message_error_str);
+        snprintf(buffer, PERSON_CONTROLLER_BUFFER_SEARCH, "%s", message_error_str);
     }
 
     con->view->show_dialog_message(con->view->object, buffer, type, button_type);
