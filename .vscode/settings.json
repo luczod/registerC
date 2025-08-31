@@ -32,7 +32,8 @@
         "person_controller_cli.h": "c",
         "gtkwidget.h": "c",
         "text_encoding": "c",
-        "configuration.h": "c"
+        "configuration.h": "c",
+        "civetweb.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
 }
