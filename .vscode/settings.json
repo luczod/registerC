@@ -31,7 +31,8 @@
         "person_controller_gtk.h": "c",
         "person_controller_cli.h": "c",
         "gtkwidget.h": "c",
-        "text_encoding": "c"
+        "text_encoding": "c",
+        "configuration.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
 }

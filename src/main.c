@@ -3,11 +3,22 @@
 #include "person_service.h"
 #include "person_repository_factory.h"
 #include "person_controller_factory.h"
+#include "configuration.h"
 
 int main(int argc, char *argv[])
 {
+    CONFIGURATION_T conf;
 
-    PERSON_REPOSITORY_BASE_T repository = person_repository_create(PERSON_REPOSITORY_TYPE_FILE);
+    configuration_ini(&conf);
+
+    if (configuration_load(&conf) == false)
+    {
+        printf("Ini File not found!");
+
+        return EXIT_FAILURE;
+    }
+
+    PERSON_REPOSITORY_BASE_T repository = person_repository_create(conf.repository_type);
 
     PERSON_SERVICE_T service;
     person_service_init(&service);
@@ -19,7 +30,7 @@ int main(int argc, char *argv[])
         .service = &service,
     };
 
-    PERSON_CONTROLLER_BASE_T controller = person_controller_factory_create(PERSON_CONTROLLER_TYPE_GTK, &args);
+    PERSON_CONTROLLER_BASE_T controller = person_controller_factory_create(conf.controller_type, &args);
     controller.run(controller.object);
 
     controller.close(controller.object);

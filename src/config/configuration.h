@@ -1,0 +1,26 @@
+#ifndef CONFIGURATION_H
+#define CONFIGURATION_H
+
+#include <stdbool.h>
+
+#define CONFIGURATION_REPOSITORY_TYPE_FILE "file"
+#define CONFIGURATION_REPOSITORY_TYPE_SQLITE "sqlite"
+
+#define CONFIGURATION_CONTROLLER_TYPE_CLI "cli"
+#define CONFIGURATION_CONTROLLER_TYPE_GTK "gtk"
+
+#define CONFIGURATION_REPOSITORY_MAX_LEN 50
+#define CONFIGURATION_CONTROLLER_MAX_LEN 50
+
+#define CONFIGURATION_FILE_PATH "config/config.ini"
+
+typedef struct CONFIGURATION_T
+{
+    char repository_type[CONFIGURATION_REPOSITORY_MAX_LEN];
+    char controller_type[CONFIGURATION_CONTROLLER_MAX_LEN];
+} CONFIGURATION_T;
+
+bool configuration_ini(CONFIGURATION_T *conf);
+bool configuration_load(CONFIGURATION_T *conf);
+
+#endif /* CONFIGURATION_H */
