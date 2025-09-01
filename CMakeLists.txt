@@ -67,7 +67,7 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver
         )
 
-        target_link_libraries(registerC ${GTK_LIBRARIES} sqlite3 ini civetweb pthread dl)
+        target_link_libraries(registerC ${GTK_LIBRARIES} sqlite3 ini civetweb pthread dl cJSON)
         add_definitions(${GTK_CFLAGS} ${GTK_CFLAGS_OTHER})
         
     endif(GTK_FOUND)
