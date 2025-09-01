@@ -60,6 +60,7 @@ bool person_controller_webserver_run(void *object)
     PERSON_CONTROLLER_WEBSERVER_T *webserver_controller = (PERSON_CONTROLLER_WEBSERVER_T *)object;
 
     webserver_run(&webserver_controller->server);
+    printf("Server started http://localhost:9090");
 
     return true;
 }
@@ -82,7 +83,7 @@ bool person_controller_webserver_close(void *object)
 
 PERSON_CONTROLLER_BASE_T person_controller_webserver_create(PERSON_CONTROLLER_ARGS_T *args)
 {
-    PERSON_CONTROLLER_WEBSERVER_T webserver_controller;
+    static PERSON_CONTROLLER_WEBSERVER_T webserver_controller;
 
     person_controller_webserver_init(&webserver_controller);
     person_controller_webserver_open(&webserver_controller, args);

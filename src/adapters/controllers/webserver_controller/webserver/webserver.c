@@ -64,6 +64,7 @@ bool webserver_run(WEBSERVER_T *webserver)
                 ;
         }
     }
+    // printf("Server started http://localhost:%s\n", webserver->port);
     return status;
 }
 
@@ -83,6 +84,7 @@ bool webserver_close(WEBSERVER_T *webserver)
 
 int log_message(const struct mg_connection *conn, const char *message)
 {
+    fprintf(stderr, "LOG: %s\n", message);
     return 0;
 }
 
