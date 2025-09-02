@@ -3,7 +3,7 @@
 
 #include "person_repository_base.h"
 
-#define DB_DATABASE_FORMAT "%s, %s, %d\n"
+#define DB_DATABASE_FORMAT "%s,%s,%d\n"
 #define DB_DATABASE_FILE "database.txt"
 #define DB_FORMAT_LEN (PERSON_NAME_LEN + PERSON_ADDRESS_LEN + 40)
 

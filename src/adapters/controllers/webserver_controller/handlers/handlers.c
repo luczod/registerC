@@ -88,6 +88,9 @@ cJSON *serialize_person(cJSON *obj, PERSON_T *person)
 
     if (person_json != NULL)
     {
+        id = cJSON_CreateNumber(person->id);
+        cJSON_AddItemToObject(person_json, "id", id);
+
         if (strlen(person->name) > 0)
         {
             name = cJSON_CreateString(person->name);
@@ -105,9 +108,6 @@ cJSON *serialize_person(cJSON *obj, PERSON_T *person)
             age = cJSON_CreateNumber(person->age);
             cJSON_AddItemToObject(person_json, "age", age);
         }
-
-        id = cJSON_CreateNumber(person->id);
-        cJSON_AddItemToObject(person_json, "id", id);
 
         if (obj != NULL)
             cJSON_AddItemToArray(obj, person_json);
