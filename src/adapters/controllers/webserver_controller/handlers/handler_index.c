@@ -21,6 +21,7 @@ int handler_index(struct mg_connection *conn, void *data)
     {
         strncat(path, ri->local_uri, sizeof(path) - strlen(root));
     }
+
     mg_send_file(conn, path);
 
     return 200;

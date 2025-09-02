@@ -60,8 +60,6 @@ bool webserver_run(WEBSERVER_T *webserver)
 
         if (webserver->mg_context != NULL)
         {
-            // mg_set_request_handler(webserver->mg_context, "/", handler_index, 0);
-            // mg_set_request_handler(webserver->mg_context, "/version", handler_version_request, 0);
             status = webserver_handler_register(webserver);
             while (status)
                 ;

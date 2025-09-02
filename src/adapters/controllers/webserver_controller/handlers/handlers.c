@@ -10,10 +10,10 @@ int handler_requests(struct mg_connection *conn, void *data)
     static REQUESTS_MAP_T map = {
         .requests =
             {
-                {.method = HANDLER_REQUESTS_GET, .hanler = handler_get},
-                {.method = HANDLER_REQUESTS_POST, .hanler = handler_post},
-                {.method = HANDLER_REQUESTS_PUT, .hanler = handler_put},
-                {.method = HANDLER_REQUESTS_DELETE, .hanler = handler_delete},
+                {.method = HANDLER_REQUESTS_GET, .handler = handler_get},
+                {.method = HANDLER_REQUESTS_POST, .handler = handler_post},
+                {.method = HANDLER_REQUESTS_PUT, .handler = handler_put},
+                {.method = HANDLER_REQUESTS_DELETE, .handler = handler_delete},
 
             },
         .amount = 4,
@@ -25,7 +25,7 @@ int handler_requests(struct mg_connection *conn, void *data)
 
         if (strcmp(ri->request_method, rm->method) == 0)
         {
-            return rm->hanler(conn, data);
+            return rm->handler(conn, data);
         }
     }
 
@@ -38,14 +38,18 @@ int send_json(struct mg_connection *conn, cJSON *json_obj, int status)
 {
     char *json_string = cJSON_PrintUnformatted(json_obj);
     size_t json_str_len = strlen(json_string);
-
-    // mg_send_http_ok(conn, "application/json; charset=utf-8", json_str_len);
+    char json_buffer[32] = {0};
+    snprintf(json_buffer, 32, "%lu", json_str_len);
 
     mg_response_header_start(conn, status);
 
     mg_response_header_add(conn, "Content-Type",
                            "application/json; charset=utf-8",
                            -1);
+
+    mg_response_header_add(conn, "Content-Length", json_buffer, -1);
+
+    mg_response_header_send(conn);
 
     mg_write(conn, json_string, json_str_len);
 

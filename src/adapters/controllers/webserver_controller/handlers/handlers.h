@@ -17,13 +17,12 @@
 #define HANDLER_ENDPOINT_VERSION "/version"
 #define HANDLER_ENDPOINT_INDEX "/"
 
-typedef int (*handler_func_t)(struct mg_connection *conn, void *data);
 typedef int (*handler_request_t)(struct mg_connection *conn, void *data);
 
 typedef struct HANDLER_T
 {
     const char *endpoint;
-    handler_func_t handler;
+    handler_request_t handler;
     void *data;
 } HANDLER_T;
 
@@ -36,7 +35,7 @@ typedef struct HANDLER_LIST_T
 typedef struct HANDLER_REQUEST_T
 {
     const char *method;
-    handler_request_t hanler;
+    handler_request_t handler;
 } HANDLER_REQUEST_MAP_T;
 
 typedef struct REQUESTS_MAP_T
