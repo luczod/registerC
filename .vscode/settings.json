@@ -33,7 +33,9 @@
         "gtkwidget.h": "c",
         "text_encoding": "c",
         "configuration.h": "c",
-        "civetweb.h": "c"
+        "civetweb.h": "c",
+        "handlers.h": "c",
+        "webserver.h": "c"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/gcc",
 }

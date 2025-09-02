@@ -102,15 +102,19 @@ static HANDLER_LIST_T *person_controller_webserver_get_handler_list(PERSON_CONTR
 {
     HANDLER_LIST_T *list = (HANDLER_LIST_T *)calloc(1, sizeof(HANDLER_LIST_T));
 
-    list->handles[0].endpoint = "/";
+    list->handles[0].endpoint = HANDLER_ENDPOINT_INDEX;
     list->handles[0].handler = handler_index;
     list->handles[0].data = webserver_controller;
 
-    list->handles[1].endpoint = "/version";
+    list->handles[1].endpoint = HANDLER_ENDPOINT_VERSION;
     list->handles[1].handler = handler_version_request;
     list->handles[1].data = webserver_controller;
 
-    list->amount = 2;
+    list->handles[2].endpoint = HANDLER_ENDPOINT_PERSON;
+    list->handles[2].handler = handler_requests;
+    list->handles[2].data = webserver_controller;
+
+    list->amount = 3;
 
     return list;
 }

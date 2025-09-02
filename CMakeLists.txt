@@ -30,6 +30,8 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/main.c
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/model/person.c
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/services/person_service.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/config/configuration.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/person_repository_factory.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/file/person_repository_file.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/repositories/sqlite/person_repository_sqlite.c
@@ -43,8 +45,12 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/person_controller_webserver.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver/webserver.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handlers.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/config/configuration.c
-            ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_get.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_post.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_put.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_delete.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_index.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handler_version.c
         )
 
         target_include_directories(registerC
