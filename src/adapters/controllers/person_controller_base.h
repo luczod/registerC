@@ -8,6 +8,7 @@ typedef struct PERSON_CONTROLLER_ARGS_T
     PERSON_SERVICE_T *service;
     int argc;
     char **argv;
+    char *port;
 } PERSON_CONTROLLER_ARGS_T;
 
 typedef struct PERSON_CONTROLLER_BASE_T

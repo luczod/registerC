@@ -42,6 +42,7 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog/edit_dialog.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/person_controller_webserver.c
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver/webserver.c
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers/handlers.c
             ${CMAKE_CURRENT_LIST_DIR}/src/config/configuration.c
             ${CMAKE_CURRENT_LIST_DIR}/src/domain/ports
         )
@@ -65,6 +66,7 @@ if (PKG_CONFIG_FOUND)
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/gtk_controller/view/editdialog
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller
             ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/webserver
+            ${CMAKE_CURRENT_LIST_DIR}/src/adapters/controllers/webserver_controller/handlers
         )
 
         target_link_libraries(registerC ${GTK_LIBRARIES} sqlite3 ini civetweb pthread dl cJSON)

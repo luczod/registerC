@@ -10,6 +10,7 @@ typedef struct PERSON_CONTROLLER_WEBSERVER_T
     PERSON_CONTROLLER_BASE_T base;
     PERSON_SERVICE_T *service;
     WEBSERVER_T server;
+    HANDLER_LIST_T *list;
 } PERSON_CONTROLLER_WEBSERVER_T;
 
 bool person_controller_webserver_init(void *object);

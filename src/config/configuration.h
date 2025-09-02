@@ -5,7 +5,10 @@
 
 #define CONFIGURATION_SECTOR_CONTROLLER "controller"
 #define CONFIGURATION_SECTOR_REPOSITORY "repository"
+#define CONFIGURATION_SECTOR_WEBSERVER "server"
+
 #define CONFIGURATION_VALUE_TYPE "type"
+#define CONFIGURATION_VALUE_PORT "port"
 
 #define CONFIGURATION_REPOSITORY_TYPE_FILE "file"
 #define CONFIGURATION_REPOSITORY_TYPE_SQLITE "sqlite"
@@ -16,6 +19,7 @@
 
 #define CONFIGURATION_REPOSITORY_MAX_LEN 50
 #define CONFIGURATION_CONTROLLER_MAX_LEN 50
+#define CONFIGURATION_WEBSERVER_MAX_LEN 50
 
 #define CONFIGURATION_FILE_PATH "config/config.ini"
 
@@ -23,6 +27,11 @@ typedef struct CONFIGURATION_T
 {
     char repository_type[CONFIGURATION_REPOSITORY_MAX_LEN];
     char controller_type[CONFIGURATION_CONTROLLER_MAX_LEN];
+    struct
+    {
+        char port[CONFIGURATION_WEBSERVER_MAX_LEN];
+    } webserver;
+
 } CONFIGURATION_T;
 
 bool configuration_ini(CONFIGURATION_T *conf);

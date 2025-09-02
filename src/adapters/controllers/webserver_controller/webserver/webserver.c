@@ -3,9 +3,7 @@
 #include <cJSON.h>
 
 static int log_message(const struct mg_connection *conn, const char *message);
-static int handler_index(struct mg_connection *conn, void *data);
-static int handler_version_request(struct mg_connection *conn, void *data);
-static int send_json(struct mg_connection *conn, cJSON *json_obj);
+static bool webserver_handler_register(WEBSERVER_T *webserber);
 
 bool webserver_init(WEBSERVER_T *webserver)
 {
@@ -27,9 +25,10 @@ bool webserver_open(WEBSERVER_T *webserver, WEBSERVER_ARGS_T *args)
 {
     bool status = false;
 
-    if (webserver != NULL && args != NULL)
+    if (webserver != NULL && args != NULL && args->list != NULL && args->list->amount > 0)
     {
         webserver->port = args->port;
+        webserver->list = args->list;
         status = true;
     }
 
@@ -61,10 +60,10 @@ bool webserver_run(WEBSERVER_T *webserver)
 
         if (webserver->mg_context != NULL)
         {
-            mg_set_request_handler(webserver->mg_context, "/", handler_index, 0);
-            mg_set_request_handler(webserver->mg_context, "/version", handler_version_request, 0);
-            status = true;
-            while (true)
+            // mg_set_request_handler(webserver->mg_context, "/", handler_index, 0);
+            // mg_set_request_handler(webserver->mg_context, "/version", handler_version_request, 0);
+            status = webserver_handler_register(webserver);
+            while (status)
                 ;
         }
     }
@@ -91,57 +90,18 @@ int log_message(const struct mg_connection *conn, const char *message)
     return 0;
 }
 
-int handler_index(struct mg_connection *conn, void *data)
+bool webserver_handler_register(WEBSERVER_T *webserver)
 {
-    char path[1024] = {0};
+    bool status = false;
 
-    const struct mg_request_info *ri = mg_get_request_info(conn);
-
-    const char *root = mg_get_option(mg_get_context(conn), "document_root");
-
-    strncpy(path, root, sizeof(path));
-
-    if (strcmp(ri->local_uri, "/") == 0)
+    for (unsigned char i = 0; i < webserver->list->amount; i++)
     {
-        strncat(path, "/index.html", sizeof(path) - strlen(root));
-    }
-    else
-    {
-        strncat(path, ri->local_uri, sizeof(path) - strlen(root));
-    }
-    mg_send_file(conn, path);
-
-    return 200;
-}
-
-int handler_version_request(struct mg_connection *conn, void *data)
-{
-    cJSON *obj = cJSON_CreateObject();
-
-    if (!obj)
-    {
-        mg_send_http_error(conn, 500, "Server Error");
-        return 500;
+        HANDLER_T *h = &webserver->list->handles[i];
+        mg_set_request_handler(webserver->mg_context,
+                               h->endpoint, h->handler, h->data);
     }
 
-    cJSON_AddStringToObject(obj, "version", CIVETWEB_VERSION);
-    send_json(conn, obj);
+    status = true;
 
-    cJSON_Delete(obj);
-
-    return 200;
-}
-
-int send_json(struct mg_connection *conn, cJSON *json_obj)
-{
-    char *json_string = cJSON_PrintUnformatted(json_obj);
-    size_t json_str_len = strlen(json_string);
-
-    mg_send_http_ok(conn, "application/json; charset=utf-8", json_str_len);
-
-    mg_write(conn, json_string, json_str_len);
-
-    cJSON_free(json_string);
-
-    return (int)json_str_len;
+    return status;
 }

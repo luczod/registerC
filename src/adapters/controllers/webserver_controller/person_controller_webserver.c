@@ -2,6 +2,9 @@
 #include <string.h>
 #include <stdio.h>
 #include "person_controller_webserver.h"
+#include "handlers.h"
+
+static HANDLER_LIST_T *person_controller_webserver_get_handler_list(PERSON_CONTROLLER_WEBSERVER_T *webserver_controller);
 
 typedef enum PERSON_CONTROLLER_OPTIONS
 {
@@ -44,9 +47,11 @@ bool person_controller_webserver_open(void *object, PERSON_CONTROLLER_ARGS_T *ar
         PERSON_CONTROLLER_WEBSERVER_T *webserver_controller = (PERSON_CONTROLLER_WEBSERVER_T *)object;
 
         webserver_controller->service = args->service;
+        webserver_controller->list = person_controller_webserver_get_handler_list(webserver_controller);
 
         WEBSERVER_ARGS_T web_args = {
-            .port = "9090",
+            .port = args->port,
+            .list = webserver_controller->list,
         };
 
         status = webserver_open(&webserver_controller->server, &web_args);
@@ -73,6 +78,9 @@ bool person_controller_webserver_close(void *object)
         PERSON_CONTROLLER_WEBSERVER_T *webserver_controller = (PERSON_CONTROLLER_WEBSERVER_T *)object;
 
         webserver_close(&webserver_controller->server);
+
+        free(webserver_controller->list);
+
         memset(webserver_controller, 0, sizeof(PERSON_CONTROLLER_WEBSERVER_T));
 
         status = true;
@@ -88,4 +96,21 @@ PERSON_CONTROLLER_BASE_T person_controller_webserver_create(PERSON_CONTROLLER_AR
     person_controller_webserver_open(&webserver_controller, args);
 
     return webserver_controller.base;
+}
+
+static HANDLER_LIST_T *person_controller_webserver_get_handler_list(PERSON_CONTROLLER_WEBSERVER_T *webserver_controller)
+{
+    HANDLER_LIST_T *list = (HANDLER_LIST_T *)calloc(1, sizeof(HANDLER_LIST_T));
+
+    list->handles[0].endpoint = "/";
+    list->handles[0].handler = handler_index;
+    list->handles[0].data = webserver_controller;
+
+    list->handles[1].endpoint = "/version";
+    list->handles[1].handler = handler_version_request;
+    list->handles[1].data = webserver_controller;
+
+    list->amount = 2;
+
+    return list;
 }

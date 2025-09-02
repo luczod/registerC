@@ -43,6 +43,10 @@ static int handler(void *user, const char *section, const char *name, const char
     {
         strncpy(pconfig->controller_type, value, CONFIGURATION_CONTROLLER_MAX_LEN);
     }
+    else if (MATCH(CONFIGURATION_SECTOR_WEBSERVER, CONFIGURATION_VALUE_PORT))
+    {
+        strncpy(pconfig->webserver.port, value, CONFIGURATION_WEBSERVER_MAX_LEN);
+    }
     else
     {
         return 0; /* unknown section/name, error */

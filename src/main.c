@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
         .argc = argc,
         .argv = argv,
         .service = &service,
+        .port = conf.webserver.port,
     };
 
     PERSON_CONTROLLER_BASE_T controller = person_controller_factory_create(conf.controller_type, &args);
