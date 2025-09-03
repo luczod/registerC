@@ -122,9 +122,45 @@ cJSON *serialize_error(const char *error, const char *hint)
 
     if (json != NULL)
     {
-        cJSON_AddStringToObject(json, "error", error);
+        cJSON_AddStringToObject(json, "message", error);
         cJSON_AddStringToObject(json, "hint", hint);
     }
 
     return json;
+}
+
+bool deserialize_person(const char *buffer, PERSON_T *person)
+{
+    cJSON *name;
+    cJSON *address;
+    cJSON *age;
+    cJSON *json;
+
+    PERSON_T person_temp;
+    bool status = false;
+
+    cJSON *person_json = cJSON_Parse(buffer);
+
+    if (person_json != NULL)
+    {
+        json = cJSON_CreateObject();
+
+        if (json != NULL)
+        {
+            name = cJSON_GetObjectItemCaseSensitive(person_json, "name");
+            address = cJSON_GetObjectItemCaseSensitive(person_json, "address");
+            age = cJSON_GetObjectItem(person_json, "age");
+
+            person_temp = person_create(name->valuestring, address->valuestring, age->valueint);
+
+            memcpy(person, &person_temp, sizeof(PERSON_T));
+
+            cJSON_Delete(json);
+            status = true;
+        }
+
+        cJSON_Delete(person_json);
+    }
+
+    return status;
 }
