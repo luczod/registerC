@@ -513,8 +513,8 @@
     <!-- Updated JavaScript to handle modal functionality -->
     <script>
         class PersonManager {
-            constructor() {
-                this.people = JSON.parse(localStorage.getItem('people')) || [];
+            constructor(people) {
+                this.people = JSON.parse(JSON.stringify(people)) || [];
                 this.editingId = null;
                 this.deleteId = null;
                 this.init();
@@ -703,7 +703,18 @@
         }
 
         // Initialize the application
-        const personManager = new PersonManager();
+        let personManager = [];
+        async function fetchData() {
+            try {
+                const response = await fetch('/person'); 
+                const data = await response.json();
+                personManager = new PersonManager(data.person);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        fetchData();
     </script>
 </body>
 </html>
