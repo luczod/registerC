@@ -116,7 +116,7 @@ cJSON *serialize_person(cJSON *obj, PERSON_T *person)
     return person_json;
 }
 
-cJSON *serialize_error(const char *error, const char *hint)
+cJSON *serialize_message(const char *error, const char *hint)
 {
     cJSON *json = cJSON_CreateObject();
 
@@ -152,6 +152,45 @@ bool deserialize_person(const char *buffer, PERSON_T *person)
             age = cJSON_GetObjectItem(person_json, "age");
 
             person_temp = person_create(name->valuestring, address->valuestring, age->valueint);
+
+            memcpy(person, &person_temp, sizeof(PERSON_T));
+
+            cJSON_Delete(json);
+            status = true;
+        }
+
+        cJSON_Delete(person_json);
+    }
+
+    return status;
+}
+
+bool deserialize_person_with_id(const char *buffer, PERSON_T *person)
+{
+    cJSON *name;
+    cJSON *address;
+    cJSON *age;
+    cJSON *id;
+    cJSON *json;
+
+    PERSON_T person_temp;
+    bool status = false;
+
+    cJSON *person_json = cJSON_Parse(buffer);
+
+    if (person_json != NULL)
+    {
+        json = cJSON_CreateObject();
+
+        if (json != NULL)
+        {
+            id = cJSON_GetObjectItem(person_json, "id");
+            name = cJSON_GetObjectItemCaseSensitive(person_json, "name");
+            address = cJSON_GetObjectItemCaseSensitive(person_json, "address");
+            age = cJSON_GetObjectItem(person_json, "age");
+
+            person_temp = person_create(name->valuestring, address->valuestring, age->valueint);
+            person_temp.id = id->valueint;
 
             memcpy(person, &person_temp, sizeof(PERSON_T));
 

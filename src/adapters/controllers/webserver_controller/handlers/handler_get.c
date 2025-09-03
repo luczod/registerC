@@ -27,7 +27,7 @@ int handler_get(struct mg_connection *conn, void *data)
 
     if (json == NULL)
     {
-        json = serialize_error("No content", "There is no records");
+        json = serialize_message("No content", "There is no records");
         status = 404;
     }
 
@@ -57,7 +57,7 @@ static cJSON *handler_get_all(void *object)
 
 static cJSON *handler_find(void *object, const char *name)
 {
-    cJSON *json;
+    cJSON *json = NULL;
 
     PERSON_CONTROLLER_WEBSERVER_T *controller = (PERSON_CONTROLLER_WEBSERVER_T *)object;
 

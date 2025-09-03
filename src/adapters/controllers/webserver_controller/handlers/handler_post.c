@@ -4,7 +4,7 @@
 #include "webserver.h"
 #include "person_controller_webserver.h"
 
-static cJSON *handler_add(void *object, char *buffer, int size);
+static cJSON *handler_update(void *object, char *buffer, int size);
 
 int handler_post(struct mg_connection *conn, void *data)
 {
@@ -15,7 +15,7 @@ int handler_post(struct mg_connection *conn, void *data)
     int size = mg_read(conn, buffer, sizeof(buffer) - 1);
     buffer[size] = 0;
 
-    json = handler_add(data, buffer, size);
+    json = handler_update(data, buffer, size);
 
     if (json != NULL)
     {
@@ -23,7 +23,7 @@ int handler_post(struct mg_connection *conn, void *data)
     }
     else
     {
-        json = serialize_error("Not modified", "Content not created");
+        json = serialize_message("Not modified", "Content not created");
         status = 301;
     }
 
@@ -32,7 +32,7 @@ int handler_post(struct mg_connection *conn, void *data)
     return status;
 }
 
-static cJSON *handler_add(void *object, char *buffer, int size)
+static cJSON *handler_update(void *object, char *buffer, int size)
 {
     PERSON_T person;
     cJSON *json = NULL;
@@ -42,7 +42,7 @@ static cJSON *handler_add(void *object, char *buffer, int size)
     if (deserialize_person(buffer, &person) == true)
     {
         if (controller->service->base.add(controller->service->base.object, &person) == true)
-            json = serialize_error("Created", "Register created");
+            json = serialize_message("Created", "Register created");
     }
 
     return json;

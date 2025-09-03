@@ -9,7 +9,7 @@ static cJSON *handler_remove(void *object, int id);
 
 int handler_delete(struct mg_connection *conn, void *data)
 {
-    int status = 200;
+    int status = 5000;
     cJSON *json;
     char buffer[1024] = {0};
 
@@ -17,8 +17,8 @@ int handler_delete(struct mg_connection *conn, void *data)
 
     if (ri->query_string == NULL)
     {
-        json = serialize_error("Bad Request", "/person?id<number>");
-        status = 404;
+        json = serialize_message("Bad Request", "/person?id<number>");
+        status = 401;
         send_json(conn, json, status);
         cJSON_Delete(json);
 
@@ -32,7 +32,7 @@ int handler_delete(struct mg_connection *conn, void *data)
         status = 200;
     else
     {
-        json = serialize_error("No content", "There is no records");
+        json = serialize_message("No content", "There is no records");
         status = 404;
     }
 

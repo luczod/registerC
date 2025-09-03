@@ -56,8 +56,9 @@ int handler_delete(struct mg_connection *conn, void *data);
 
 cJSON *serialize_person_list(PERSON_T *list, unsigned int amount);
 cJSON *serialize_person(cJSON *obj, PERSON_T *person);
-cJSON *serialize_error(const char *error, const char *hint);
+cJSON *serialize_message(const char *error, const char *hint);
 
 bool deserialize_person(const char *buffer, PERSON_T *person);
+bool deserialize_person_with_id(const char *buffer, PERSON_T *person);
 
 #endif /* HANDLERS_H */
