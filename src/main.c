@@ -36,7 +36,6 @@ int main(int argc, char *argv[])
 
     controller.close(controller.object);
     person_service_close(&service);
-    printf("Server started http://localhost:9090");
 
     return EXIT_SUCCESS;
 }
