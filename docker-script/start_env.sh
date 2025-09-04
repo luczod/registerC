@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd .. && docker compose up -d
+cd .. && PORT=9090 docker compose up -d

@@ -1,6 +1,7 @@
 #include <string.h>
 #include <webserver.h>
 #include <cJSON.h>
+#include <unistd.h>
 
 static int log_message(const struct mg_connection *conn, const char *message);
 static bool webserver_handler_register(WEBSERVER_T *webserber);
@@ -62,7 +63,7 @@ bool webserver_run(WEBSERVER_T *webserver)
         {
             status = webserver_handler_register(webserver);
             while (status)
-                ;
+                usleep(1);
         }
     }
     return status;

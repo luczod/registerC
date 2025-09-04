@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd .. && docker compose build
+cd .. && PORT=9090 docker compose build --no-cache
