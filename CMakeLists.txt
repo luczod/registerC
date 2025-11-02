@@ -84,13 +84,13 @@ if (PKG_CONFIG_FOUND)
 endif(PKG_CONFIG_FOUND)
 
 add_custom_command(TARGET registerC POST_BUILD  
-                        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/resources
+                        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources
                         ${CMAKE_BINARY_DIR}/bin/resources)
 
 add_custom_command(TARGET registerC POST_BUILD  
-                        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/config
+                        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/config
                         ${CMAKE_BINARY_DIR}/bin/config)
 
 add_custom_command(TARGET registerC POST_BUILD  
-                        COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_SOURCE_DIR}/assets
+                        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/assets
                         ${CMAKE_BINARY_DIR}/bin/assets)
