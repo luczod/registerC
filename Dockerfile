@@ -26,4 +26,6 @@ RUN cmake .. && make
 
 EXPOSE 8080/tcp
 
-ENTRYPOINT ["/app/build/bin/registerC"]
+WORKDIR /app/build/bin/
+
+CMD ["./registerC"]
