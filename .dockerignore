@@ -1,0 +1,15 @@
+build
+!build/bin
+uploads
+
+.env
+
+
+CMakeUserPresets.json
+CMakePresets.json
+CMakeCache.txt
+
+CMakeFiles
+.cmake
+.git
+.gitignore
